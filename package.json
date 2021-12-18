@@ -1,0 +1,44 @@
+{
+  "name": "eilume-website",
+  "version": "0.1.0",
+  "description": "A simple website for all the stuff I'm up to.",
+  "scripts": {
+    "clean": "rimraf public",
+    "start:tailwind": "npx tailwindcss -i src/assets/css/tailwind.css -o public/assets/css/styles.css --watch",
+    "start:eleventy": "eleventy --serve",
+    "build:tailwind": "npx tailwindcss -i src/assets/css/tailwind.css -o public/assets/css/styles.css --minify",
+    "build:eleventy": "ELEVENTY_PRODUCTION=true eleventy",
+    "build:pre-vite": "node build/pre-vite.js",
+    "build:vite": "vite build",
+    "build:post-vite": "node build/post-vite.js",
+    "start": "npm-run-all clean --parallel start:*",
+    "build": "NODE_ENV=production npm-run-all clean build:tailwind build:eleventy build:pre-vite build:vite build:post-vite"
+  },
+  "keywords": [],
+  "author": "eilume",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eilume/eilume-website.git"
+  },
+  "bugs": {
+    "url": "https://github.com/eilume/eilume-website/issues"
+  },
+  "homepage": "https://github.com/eilume/eilume-website#readme",
+  "devDependencies": {
+    "@11ty/eleventy": "^0.12.1",
+    "@11ty/eleventy-img": "^1.0.0",
+    "moment": "^2.29.1",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.2",
+    "tailwindcss": "^3.0.2",
+    "vite-plugin-html": "^2.1.1",
+    "vite-plugin-pwa": "^0.11.11"
+  },
+  "dependencies": {
+    "autoprefixer": "^10.4.0",
+    "fs-extra": "^10.0.0",
+    "postcss-import": "^14.0.2",
+    "vite": "^2.7.2"
+  }
+}

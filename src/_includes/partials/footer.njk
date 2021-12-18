@@ -1,0 +1,13 @@
+<footer class="footer" role="banner">
+    {% for footeritem in footer[locale] %}
+        {% if loop.first %} <ul class="footer" role="menubar"> {% endif %}
+            <li role="menuitem">
+                {% if footeritem.url %}
+                <a href="{{ footeritem.url }}">{{ footeritem.text }}</a>
+                {% else %}
+                <p>{{ footeritem.text }}</p>
+                {% endif %}
+            </li>
+        {% if loop.last %} </ul> {% endif %}
+    {% endfor %}
+</footer>

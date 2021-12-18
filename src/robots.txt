@@ -1,0 +1,4 @@
+Sitemap: https://eilume.netlify.app/sitemap.xml
+
+User-agent: *
+Disallow:

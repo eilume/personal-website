@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="{{ locale }}">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+		<meta name="robots" content="noindex">
+		
+		<title>{{ site.titlePrefix }}{{ title if title else site[locale].metaTitle }}</title>
+		<meta name="description" content="{{ description if description else site[locale].metaDescription }}"/>
+
+		<link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+
+		<link rel="stylesheet" href="{{ '/assets/css/styles.css' | url }}">
+		<link rel="stylesheet" href="{{ '/assets/css/extra.css' | url }}">
+
+		<!-- No Script -->
+		<noscript>
+			<style>
+				noscript {
+					display: contents;
+				}
+				
+				.lazy-img {
+					display: none;
+				}
+			</style>
+		</noscript>
+
+		<!-- Open Graph -->
+		<meta property="og:url" content="{{ site.baseUrl }}{{ url | url }}">
+		<meta property="og:type" content="website">
+		<meta property="og:title" content="{{ site.titlePrefix }}{{ title if title else site[locale].metaTitle }}">
+		<meta property="og:description" content="{{ description if description else site[locale].metaDescription }}">
+		<meta property="og:image" content="{{ cover }}">
+		<meta property="og:site_name" content="{{ site.name }}">
+		
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary_large_image">
+		<meta property="twitter:domain" content="{{ site.domain }}">
+		<meta property="twitter:url" content="{{ site.baseUrl }}{{ url | url }}">
+		<meta name="twitter:site" content="{{ site.twitter }}">
+		<meta name="twitter:title" content="{{ site.titlePrefix }}{{ title if title else site[locale].metaTitle }}">
+		<meta name="twitter:description" content="{{ description if description else site[locale].metaDescription }}">
+		<meta name="twitter:image" content="{{ cover }}">
+	</head>
+	
+	<body {% if templateClass %} class="{{ templateClass }}" {% endif %}>
+		{% include "partials/header.njk" %}
+		<main id="main-content" class="main">
+			<div class="inner">
+				{% block content %}
+				{% endblock %}
+			</div>
+		</main>
+		{% include "partials/footer.njk" %}
+		<script type="module" src="{{ '/assets/js/app.js' | url }}"></script>
+	</body>
+</html>

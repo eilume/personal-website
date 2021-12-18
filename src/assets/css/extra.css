@@ -1,0 +1,21 @@
+body {
+    margin: 8px;
+}
+
+.lazy-picture {
+    display: inline-block;
+    overflow: hidden;
+    border-radius: 1em;
+    width: auto;
+}
+
+.lazy-img {
+    filter: blur(8px);
+    transform: scale(1.02);
+    transition: all 0.7s ease-out;
+}
+
+.lazy-picture[data-loaded] .lazy-img {
+    filter: unset;
+    transform: none;
+}
