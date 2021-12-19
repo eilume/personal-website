@@ -13,7 +13,7 @@
 		<link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
 
 		<link rel="stylesheet" href="{{ '/assets/css/styles.css' | url }}">
-		<link rel="stylesheet" href="{{ '/assets/css/extra.css' | url }}">
+		<link rel="stylesheet" href="{{ '/assets/css/custom.css' | url }}">
 
 		<!-- No Script -->
 		<noscript>
@@ -29,21 +29,21 @@
 		</noscript>
 
 		<!-- Open Graph -->
-		<meta property="og:url" content="{{ site.baseUrl }}{{ url | url }}">
+		<meta property="og:url" content="{{ site.baseUrl }}{{ page.url | url }}">
 		<meta property="og:type" content="website">
 		<meta property="og:title" content="{{ site.titlePrefix }}{{ title if title else site[locale].metaTitle }}">
 		<meta property="og:description" content="{{ description if description else site[locale].metaDescription }}">
-		<meta property="og:image" content="{{ cover }}">
+		<meta property="og:image" content="{{ cover if cover else site.baseImage  }}">
 		<meta property="og:site_name" content="{{ site.name }}">
 		
 		<!-- Twitter -->
 		<meta name="twitter:card" content="summary_large_image">
 		<meta property="twitter:domain" content="{{ site.domain }}">
-		<meta property="twitter:url" content="{{ site.baseUrl }}{{ url | url }}">
+		<meta property="twitter:url" content="{{ site.baseUrl }}{{ page.url | url }}">
 		<meta name="twitter:site" content="{{ site.twitter }}">
 		<meta name="twitter:title" content="{{ site.titlePrefix }}{{ title if title else site[locale].metaTitle }}">
 		<meta name="twitter:description" content="{{ description if description else site[locale].metaDescription }}">
-		<meta name="twitter:image" content="{{ cover }}">
+		<meta name="twitter:image" content="{{ cover if cover else site.baseImage }}">
 	</head>
 	
 	<body {% if templateClass %} class="{{ templateClass }}" {% endif %}>
@@ -55,6 +55,6 @@
 			</div>
 		</main>
 		{% include "partials/footer.njk" %}
-		<script type="module" src="{{ '/assets/js/app.js' | url }}"></script>
+		<script type="text/javascript" src="{{ '/assets/js/app.js' | url }}"></script>
 	</body>
 </html>

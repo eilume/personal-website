@@ -22,13 +22,30 @@ const imageShortcode = async (
 
     // Generate images
     const imageMetadata = await Image(fullSrc, {
-        // widths: [ImageWidths.ORIGINAL, ImageWidths.PLACEHOLDER, ...widths],
-        widths: [ImageWidths.PLACEHOLDER, ...widths],
+        widths: [ImageWidths.ORIGINAL, ImageWidths.PLACEHOLDER, ...widths],
+        // widths: [ImageWidths.PLACEHOLDER, ...widths],
         formats: [...optimizedFormats, baseFormat],
         outputDir: path.join('public', imgDir),
         urlPath: imgDir,
         filenameFormat: (hash, _src, width, format) => {
-            const suffix = width === ImageWidths.PLACEHOLDER ? 'placeholder' : width;
+            let suffix;
+            switch (width) {
+                case ImageWidths.PLACEHOLDER:
+                    suffix = 'placeholder';
+                    break;
+
+                default:
+                    let isOriginalWidth = true;
+                    for (let i = 0; i < widths.length; i++) {
+                        if (width === widths[i]) {
+                            isOriginalWidth = false;
+                            suffix = width;
+                        }
+                    }
+
+                    if (isOriginalWidth) suffix = 'original';
+            }
+
             return `${imgName}-${hash}-${suffix}.${format}`;
         },
     });

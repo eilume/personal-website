@@ -1,0 +1,11 @@
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = '''
+    frame-ancestors https://www.youtube-nocookie.com;
+    script-src 'self';
+    object-src 'none';
+    '''
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"

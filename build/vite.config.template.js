@@ -10,11 +10,10 @@ export default defineConfig({
         VitePWA()
     ],
     build: {
-        emptyOutDir: true,
+        outDir: "../dist",
         rollupOptions: {
             input: {},
             external: ["public/assets/css/styles.css"]
         },
-        outDir: "../dist"
     }
 });

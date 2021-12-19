@@ -29,16 +29,26 @@ function getFilteredFiles(startPath, filter, outputList) {
 
 let file = fs.readFileSync(inputFilePath, 'utf-8');
 
-// let filePaths = "main: resolve(__dirname, 'public/en/index.html')";
 let filePaths = [];
 getFilteredFiles("./public", ".html", filePaths);
 
 let outputString = "";
 for (let i = 0; i < filePaths.length; i++) {
-    let key = filePaths[i].replace(/[\/-]/g, "_").replace("_index.html", "");
-    let value = "resolve(__dirname, '" + filePaths[i];
-    outputString += key + ": " + value + "'), ";
+    let key = filePaths[i].replace(/[\/-]/g, "_").replace("_index.html", "_html").replace(".css", "_css").replace(".js", "_js");
+
+    outputString += key + ": " + "resolve(__dirname, '" + filePaths[i] + "'), ";
 }
+
+filePaths = [];
+getFilteredFiles("./public/assets/js", ".js", filePaths);
+
+for (let i = 0; i < filePaths.length; i++) {
+    let key = path.basename(filePaths[i]).replace(/[\/-]/g, "_").replace(".js", '');
+
+    outputString += key + ": " + "resolve(__dirname, '" + filePaths[i] + "'), ";
+}
+
+outputString += "styles: resolve(__dirname, 'public/assets/css/styles.css')";
 
 let replaceValue = replaceString.replace(replaceSubstring, " " + outputString + " ");
 
