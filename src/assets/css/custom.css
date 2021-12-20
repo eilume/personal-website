@@ -2,7 +2,7 @@ body {
     margin: 8px;
 }
 
-.lazy-picture {
+picture {
     display: inline-block;
     overflow: hidden;
     border-radius: 1em;

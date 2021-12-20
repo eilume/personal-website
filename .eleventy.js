@@ -9,6 +9,7 @@ const ImageWidths = {
 
 // From: https://www.aleksandrhovhannisyan.com/blog/eleventy-image-lazy-loading/
 const imageShortcode = async (
+    lazy,
     src,
     alt,
     className,
@@ -67,7 +68,24 @@ const imageShortcode = async (
 
     const { width, height } = formatSizes[baseFormat].largest;
 
-    const picture = `<picture class="lazy-picture">
+    const lazyImg = `<img
+        src="${formatSizes[baseFormat].placeholder.url}"
+        data-src="${formatSizes[baseFormat].largest.url}"
+        width="${width}"
+        height="${height}"
+        alt="${alt != undefined ? alt : ""}"
+        class="lazy-img"
+        loading="lazy"
+    >`;
+
+    const normalImg = `<img
+        src="${formatSizes[baseFormat].largest.url}"
+        width="${width}"
+        height="${height}"
+        alt="${alt != undefined ? alt : ""}"
+    >`;
+
+    const picture = `<picture${lazy ? " class=" + '"' + "lazy-picture" + '"' : ""}>
     ${Object.values(imageMetadata)
             // Map each format to the source HTML markup
             .map((formatEntries) => {
@@ -82,27 +100,17 @@ const imageShortcode = async (
                     .map((image) => image.srcset)
                     .join(', ');
 
-                return `<source type="${sourceType}" srcset="${placeholderSrcset}" data-srcset="${actualSrcset}" data-sizes="${sizes}">`;
+                if (lazy) {
+                    return `<source type="${sourceType}" srcset="${placeholderSrcset}" data-srcset="${actualSrcset}" data-sizes="${sizes}">`;
+                }
+                else {
+                    return `<source type="${sourceType}" src="${placeholderSrcset}" srcset="${actualSrcset}" sizes="${sizes}">`;
+                }
             })
             .join('\n')}
-    <img
-        src="${formatSizes[baseFormat].placeholder.url}"
-        data-src="${formatSizes[baseFormat].largest.url}"
-        width="${width}"
-        height="${height}"
-        alt="${alt != undefined ? "alt=" + alt + '"' : ""}"
-        class="lazy-img"
-        loading="lazy">
-    <noscript>
-        <img
-            src="${formatSizes[baseFormat].largest.url}"
-            width="${width}"
-            height="${height}"
-            alt="${alt != undefined ? "alt=" + alt + '"' : ""}">
-    </noscript>
+    ${lazy ? lazyImg + "<noscript>" + normalImg + "</noscript>" : normalImg}
     </picture>`;
 
-    // return outdent`${picture}`;
     return picture;
 };
 
@@ -129,7 +137,7 @@ module.exports = function (config) {
     config.addPassthroughCopy('./src/_redirects');
 
     config.addShortcode('image', imageShortcode);
-    config.addNunjucksAsyncShortcode('image', imageShortcode);
+    // config.addNunjucksAsyncShortcode('image', imageShortcode);
 
     return {
         passthroughFileCopy: true,
