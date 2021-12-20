@@ -22,12 +22,13 @@ function getFilteredFiles(startPath, filter, outputList) {
     };
 };
 
+let htmlFiles = [];
+getFilteredFiles("./dist", ".html", htmlFiles);
+
 let publicJSFiles = [];
 let distJSFiles = [];
-let htmlFiles = [];
 getFilteredFiles("./public/assets/js", ".js", publicJSFiles);
 getFilteredFiles("./dist/assets", ".js", distJSFiles);
-getFilteredFiles("./dist", ".html", htmlFiles);
 
 for (let h = 0; h < htmlFiles.length; h++) {
     let htmlFile = fs.readFileSync(htmlFiles[h], "utf-8").toString();
@@ -47,11 +48,47 @@ for (let h = 0; h < htmlFiles.length; h++) {
         }
 
         if (distJSFilePath != "") {
-
             let pathRegex = new RegExp("\/", "g");
             let fileRegex = new RegExp("(" + publicJSFilePath.replace(pathRegex, "\\/") + ")", "g");
 
             htmlFile = htmlFile.replace(fileRegex, distJSFilePath);
+
+            updatedFile = true;
+        }
+    }
+
+    if (updatedFile) {
+        fs.writeFileSync(htmlFiles[h], htmlFile, "utf-8");
+    }
+}
+
+let publicCSSFiles = [];
+let distCSSFiles = [];
+getFilteredFiles("./public/assets/css", ".css", publicCSSFiles);
+getFilteredFiles("./dist/assets", ".css", distCSSFiles);
+
+for (let h = 0; h < htmlFiles.length; h++) {
+    let htmlFile = fs.readFileSync(htmlFiles[h], "utf-8").toString();
+    let updatedFile = false;
+
+    for (let pc = 0; pc < publicCSSFiles.length; pc++) {
+        let publicCSSFilePath = publicCSSFiles[pc].replace("public/", "");
+        let publicCSSFileName = path.basename(publicCSSFiles[pc]).replace(".css", "");
+
+        let distCSSFilePath = "";
+
+        for (let dc = 0; dc < distCSSFiles.length; dc++) {
+            if (path.basename(distCSSFiles[dc]).includes(publicCSSFileName)) {
+                distCSSFilePath = distCSSFiles[dc].replace("dist/", "");
+                break;
+            }
+        }
+
+        if (distCSSFilePath != "") {
+            let pathRegex = new RegExp("\/", "g");
+            let fileRegex = new RegExp("(" + publicCSSFilePath.replace(pathRegex, "\\/") + ")", "g");
+
+            htmlFile = htmlFile.replace(fileRegex, distCSSFilePath);
 
             updatedFile = true;
         }

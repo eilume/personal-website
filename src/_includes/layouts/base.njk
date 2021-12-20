@@ -9,23 +9,19 @@
 		
 		<title>{{ site.titlePrefix }}{{ title if title else site[locale].metaTitle }}</title>
 		<meta name="description" content="{{ description if description else site[locale].metaDescription }}"/>
+		
+		<!-- Favicon -->
+		<link rel="icon" href="{{ '/assets/favicon.png' | url }}" sizes="any">
+		<link rel="icon" href="{{ '/assets/favicon.svg' | url }}" type="image/svg+xml">
+		{# <link rel="apple-touch-icon" href="{{ '/assets/apple-touch-icon.png' | url }}"/> #}
 
-		<link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
-
+		<!-- Styles -->
 		<link rel="stylesheet" href="{{ '/assets/css/styles.css' | url }}">
 		<link rel="stylesheet" href="{{ '/assets/css/custom.css' | url }}">
 
 		<!-- No Script -->
 		<noscript>
-			<style>
-				noscript {
-					display: contents;
-				}
-				
-				.lazy-img {
-					display: none;
-				}
-			</style>
+			<link rel="stylesheet" href="{{ '/assets/css/no-script.css' | url }}">
 		</noscript>
 
 		<!-- Open Graph -->
@@ -55,6 +51,6 @@
 			</div>
 		</main>
 		{% include "partials/footer.njk" %}
-		<script type="text/javascript" src="{{ '/assets/js/app.js' | url }}"></script>
+		<script type="text/javascript" src="{{ '/assets/js/app.js' | url }}" defer></script>
 	</body>
 </html>
