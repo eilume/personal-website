@@ -1,3 +1,5 @@
+/* Overall Style */
+
 body {
     margin: 8px;
 }
@@ -8,6 +10,33 @@ picture {
     border-radius: 1em;
     width: auto;
 }
+
+/* Syntax Highlighting */
+
+code[class*="language-"],
+pre[class*="language-"] {
+    text-shadow: none;
+}
+
+.highlight-line {
+    text-decoration: none;
+    color: inherit;
+}
+
+.highlight-line-active {
+    background-color: hsl(220, 13%, 27%);
+    /* background-color: hsla(0, 0%, 27%, .8); */
+}
+
+.highlight-line-add {
+    background-color: hsl(126, 31% , 29%);
+}
+
+.highlight-line-remove {
+    background-color: hsl(0, 51%, 29%);
+}
+
+/* Lazy Images */
 
 .lazy-img {
     filter: blur(8px);

@@ -16,13 +16,15 @@
 		{# <link rel="apple-touch-icon" href="{{ '/assets/apple-touch-icon.png' | url }}"/> #}
 
 		<!-- Styles -->
+		<!-- TailwindCSS -->
 		<link rel="stylesheet" href="{{ '/assets/css/styles.css' | url }}">
+		<!-- Prism.js Theme - One Dark | By Hoon Wei Ting, based on Atom's One Light Syntax -->
+		<!-- https://github.com/PrismJS/prism-themes/blob/master/themes/prism-one-dark.css -->
+		<link rel="stylesheet" href="{{ '/assets/css/prism.css' | url }}">
+		<!-- Custom styles/overrides -->
 		<link rel="stylesheet" href="{{ '/assets/css/custom.css' | url }}">
-
-		<!-- No Script -->
-		<noscript>
-			<link rel="stylesheet" href="{{ '/assets/css/no-script.css' | url }}">
-		</noscript>
+		<!-- No script overrides -->
+		<noscript><link rel="stylesheet" href="{{ '/assets/css/no-script.css' | url }}"></noscript>
 
 		<!-- Open Graph -->
 		<meta property="og:url" content="{{ site.baseUrl }}{{ page.url | url }}">

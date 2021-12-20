@@ -1,5 +1,6 @@
 const moment = require("moment");
-const Image = require('@11ty/eleventy-img');
+const pluginImage = require('@11ty/eleventy-img');
+const pluginSyntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
 const path = require("path");
 
 const ImageWidths = {
@@ -22,7 +23,7 @@ const imageShortcode = async (
     const fullSrc = path.join('src', src);
 
     // Generate images
-    const imageMetadata = await Image(fullSrc, {
+    const imageMetadata = await pluginImage(fullSrc, {
         widths: [ImageWidths.ORIGINAL, ImageWidths.PLACEHOLDER, ...widths],
         // widths: [ImageWidths.PLACEHOLDER, ...widths],
         formats: [...optimizedFormats, baseFormat],
@@ -115,6 +116,8 @@ const imageShortcode = async (
 };
 
 module.exports = function (config) {
+    config.addPlugin(pluginSyntaxHighlight);
+
     // Date filter (localized)
     config.addNunjucksFilter("date", function (date, format, locale) {
         locale = locale ? locale : "en";
