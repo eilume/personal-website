@@ -1,50 +1,85 @@
 /* Overall Style */
 
 body {
-    margin: 8px;
+	margin: 8px;
 }
 
 picture {
-    display: inline-block;
-    overflow: hidden;
-    border-radius: 1em;
-    width: auto;
+	display: inline-block;
+	overflow: hidden;
+	border-radius: 1em;
+	width: auto;
 }
 
 /* Syntax Highlighting */
 
 code[class*="language-"],
 pre[class*="language-"] {
-    text-shadow: none;
+	text-shadow: none;
 }
 
 .highlight-line {
-    text-decoration: none;
-    color: inherit;
+	text-decoration: none;
+	color: inherit;
 }
 
 .highlight-line-active {
-    background-color: hsl(220, 13%, 27%);
-    /* background-color: hsla(0, 0%, 27%, .8); */
+	background-color: hsl(220, 13%, 27%);
+	/* background-color: hsla(0, 0%, 27%, .8); */
 }
 
 .highlight-line-add {
-    background-color: hsl(126, 31% , 29%);
+	background-color: hsl(126, 31%, 29%);
 }
 
 .highlight-line-remove {
-    background-color: hsl(0, 51%, 29%);
+	background-color: hsl(0, 51%, 29%);
 }
+
+/* .line-highlight::before,
+.line-highlight[data-end]::after {
+	content: attr(data-start);
+	position: absolute;
+	top: 0.4em;
+	left: 0.6em;
+	min-width: 1em;
+	padding: 0 0.5em;
+	background-color: hsla(24, 20%, 50%, 0.4);
+	color: #f4f1ef;
+	font: bold 65%/1.5 sans-serif;
+	text-align: center;
+	vertical-align: 0.3em;
+	border-radius: 999px;
+	text-shadow: none;
+	box-shadow: 0 1px #fff;
+} */
+
+/* .line-highlight {
+	position: absolute;
+	left: 0;
+	right: 0;
+	padding: inherit 0;
+	margin-top: 1em;
+	background: hsla(24, 20%, 50%, 0.08);
+	background: linear-gradient(
+		to right,
+		hsla(24, 20%, 50%, 0.1) 70%,
+		hsla(24, 20%, 50%, 0)
+	);
+	pointer-events: none;
+	line-height: inherit;
+	white-space: pre;
+} */
 
 /* Lazy Images */
 
 .lazy-img {
-    filter: blur(8px);
-    transform: scale(1.02);
-    transition: all 0.7s ease-out;
+	filter: blur(8px);
+	transform: scale(1.02);
+	transition: all 0.7s ease-out;
 }
 
 .lazy-picture[data-loaded] .lazy-img {
-    filter: unset;
-    transform: none;
+	filter: unset;
+	transform: none;
 }

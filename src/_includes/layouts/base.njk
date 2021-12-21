@@ -17,12 +17,11 @@
 
 		<!-- Styles -->
 		<!-- TailwindCSS -->
-		<link rel="stylesheet" href="{{ '/assets/css/styles.css' | url }}">
-		<!-- Prism.js Theme - One Dark | By Hoon Wei Ting, based on Atom's One Light Syntax -->
-		<!-- https://github.com/PrismJS/prism-themes/blob/master/themes/prism-one-dark.css -->
-		<link rel="stylesheet" href="{{ '/assets/css/prism.css' | url }}">
+		<link href="{{ '/assets/css/styles.css' | url }}" rel="stylesheet" type="text/css">
+		<!-- Prism.js theme -->
+		<link href="{{ '/assets/css/prism-tomorrow-night.css' | url }}" rel="stylesheet" type="text/css">
 		<!-- Custom styles/overrides -->
-		<link rel="stylesheet" href="{{ '/assets/css/custom.css' | url }}">
+		<link href="{{ '/assets/css/custom.css' | url }}" rel="stylesheet" type="text/css">
 		<!-- No script overrides -->
 		<noscript><link rel="stylesheet" href="{{ '/assets/css/no-script.css' | url }}"></noscript>
 
@@ -53,6 +52,7 @@
 			</div>
 		</main>
 		{% include "partials/footer.njk" %}
-		<script type="text/javascript" src="{{ '/assets/js/app.js' | url }}" defer></script>
+		<script defer src="{{ '/assets/js/prism.js' | url }}" type="module"></script>
+		<script defer src="{{ '/assets/js/app.js' | url }}" type="text/javascript"></script>
 	</body>
 </html>
