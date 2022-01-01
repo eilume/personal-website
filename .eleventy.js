@@ -8,19 +8,33 @@ const ImageWidths = {
     PLACEHOLDER: 24,
 };
 
-// From: https://www.aleksandrhovhannisyan.com/blog/eleventy-image-lazy-loading/
+// Originally from: https://www.aleksandrhovhannisyan.com/blog/eleventy-image-lazy-loading/
+// Slight edits have been made
 const imageShortcode = async (
     lazy,
     src,
     alt,
-    className,
+    fileName,
+    urlPath,
     widths = [400, 800, 1280, 2560],
     baseFormat = 'jpeg',
     optimizedFormats = ['avif', 'webp'],
     sizes = '100vw'
 ) => {
-    const { name: imgName, dir: imgDir } = path.parse(src);
-    const fullSrc = path.join('src', src);
+    let imgName, imgDir, fullSrc;
+    
+    if (/https?:\/\//.test(src)) {
+        imgName = fileName;
+        imgDir = urlPath;
+        fullSrc = src;
+    }
+    else {
+        const { name: parsedName, dir: parsedDir } = path.parse(src);
+        
+        imgName = parsedName;
+        imgDir = parsedDir;
+        fullSrc = path.join('src', src);
+    }
 
     // Generate images
     const imageMetadata = await pluginImage(fullSrc, {

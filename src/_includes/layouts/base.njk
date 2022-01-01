@@ -19,7 +19,7 @@
 		<!-- TailwindCSS -->
 		<link href="{{ '/assets/css/styles.css' | url }}" rel="stylesheet" type="text/css">
 		<!-- Prism.js theme -->
-		<link href="{{ '/assets/css/prism-tomorrow-night.css' | url }}" rel="stylesheet" type="text/css">
+		<link href="{{ '/assets/css/prism.css' | url }}" rel="stylesheet" type="text/css">
 		<!-- Custom styles/overrides -->
 		<link href="{{ '/assets/css/custom.css' | url }}" rel="stylesheet" type="text/css">
 		<!-- No script overrides -->
@@ -53,6 +53,6 @@
 		</main>
 		{% include "partials/footer.njk" %}
 		<script defer src="{{ '/assets/js/prism.js' | url }}" type="module"></script>
-		<script defer src="{{ '/assets/js/app.js' | url }}" type="text/javascript"></script>
+		<script defer src="{{ '/assets/js/app.js' | url }}" type="module"></script>
 	</body>
 </html>
