@@ -1,6 +1,5 @@
 const moment = require("moment");
 const pluginImage = require('@11ty/eleventy-img');
-const pluginSyntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
 const path = require("path");
 
 const ImageWidths = {
@@ -16,7 +15,8 @@ const imageShortcode = async (
     alt,
     fileName,
     urlPath,
-    widths = [400, 800, 1280, 2560],
+    unscaledWidths = [400, 800, 1200, 1600, 2000, 2400],
+    scaledWidths = [800, 1200, 1600, 2000, 2400],
     baseFormat = 'jpeg',
     optimizedFormats = ['avif', 'webp'],
     sizes = '100vw'
@@ -36,11 +36,53 @@ const imageShortcode = async (
         fullSrc = path.join('src', src);
     }
 
-    // Generate images
+    let sharedWidths = Array.from(new Set(unscaledWidths.concat(scaledWidths)));
+    let originalWidth;
+    let baseFileHash;
+
+    console.log(`\nStarting to generate images for '${imgName}'...`);
+
+    // Generate unscaled images
     const imageMetadata = await pluginImage(fullSrc, {
-        widths: [ImageWidths.ORIGINAL, ImageWidths.PLACEHOLDER, ...widths],
-        // widths: [ImageWidths.PLACEHOLDER, ...widths],
+        widths: [ImageWidths.ORIGINAL, ImageWidths.PLACEHOLDER, ...unscaledWidths],
+        // widths: [ImageWidths.PLACEHOLDER, ...unscaledWidths],
         formats: [...optimizedFormats, baseFormat],
+        outputDir: path.join('public', imgDir),
+        urlPath: imgDir,
+        filenameFormat: (hash, _src, width, format) => {
+            baseFileHash = hash;
+            let suffix;
+            switch (width) {
+                case ImageWidths.PLACEHOLDER:
+                    suffix = 'placeholder';
+                    break;
+
+                default:
+                    let isOriginalWidth = true;
+                    for (let i = 0; i < sharedWidths.length; i++) {
+                        if (width === sharedWidths[i]) {
+                            isOriginalWidth = false;
+                            suffix = width;
+                        } else {
+                            originalWidth = width;
+                        }
+                    }
+
+                    if (isOriginalWidth) suffix = 'original';
+            }
+
+            return `${imgName}-${hash}-${suffix}.${format}`;
+        },
+    });
+
+    // Generate scaled images with lower quality because of device pixel ratio resulting in super-sampling
+    const scaledImageMetadata = await pluginImage(fullSrc, {
+        widths: [ImageWidths.ORIGINAL, ...scaledWidths],
+        formats: [...optimizedFormats, baseFormat],
+        sharpJpegOptions: { quality: 45, }, // options passed to the Sharp jpeg output method
+        sharpPngOptions: { quality: 65, }, // options passed to the Sharp png output method
+        sharpWebpOptions: { quality: 45 }, // options passed to the Sharp webp output method
+        sharpAvifOptions: { quality: 30 }, // options passed to the Sharp avif output method
         outputDir: path.join('public', imgDir),
         urlPath: imgDir,
         filenameFormat: (hash, _src, width, format) => {
@@ -52,19 +94,32 @@ const imageShortcode = async (
 
                 default:
                     let isOriginalWidth = true;
-                    for (let i = 0; i < widths.length; i++) {
-                        if (width === widths[i]) {
+                    for (let i = 0; i < sharedWidths.length; i++) {
+                        if (width === sharedWidths[i]) {
                             isOriginalWidth = false;
                             suffix = width;
+                        } else {
+                            originalWidth = width;
                         }
                     }
 
                     if (isOriginalWidth) suffix = 'original';
             }
 
-            return `${imgName}-${hash}-${suffix}.${format}`;
+            return `${imgName}-${baseFileHash}-hidpiscaled-${suffix}.${format}`;
         },
     });
+
+    unscaledWidths.push(originalWidth);
+    scaledWidths.push(originalWidth);
+    sharedWidths.push(originalWidth);
+
+    for (keyIndex in Object.keys(imageMetadata))
+    {
+        let key = Object.keys(imageMetadata)[keyIndex];
+
+        scaledImageMetadata[key].forEach((value) => {imageMetadata[key].push(value)});
+    }
 
     // Map each unique format (e.g., jpeg, webp) to its smallest and largest images
     const formatSizes = Object.entries(imageMetadata).reduce((formatSizes, [format, images]) => {
@@ -72,6 +127,8 @@ const imageShortcode = async (
             const placeholder = images.find((image) => image.width === ImageWidths.PLACEHOLDER);
             // 11ty sorts the sizes in ascending order under the hood
             const largestVariant = images[images.length - 1];
+
+            originalWidth = largestVariant.width;
 
             formatSizes[format] = {
                 placeholder,
@@ -108,18 +165,31 @@ const imageShortcode = async (
                 const { format: formatName, sourceType } = formatEntries[0];
 
                 const placeholderSrcset = formatSizes[formatName].placeholder.url;
-                const actualSrcset = formatEntries
+
+                // console.log(formatEntries);
+
+                const unscaledSrcset = formatEntries
                     // We don't need the placeholder image in the srcset
-                    .filter((image) => image.width !== ImageWidths.PLACEHOLDER)
+                    // We also only want the normaldpi scaled images
+                    .filter((image) => image.width !== ImageWidths.PLACEHOLDER && !image.filename.includes("-hidpiscaled-"))
+                    // All non-placeholder images get mapped to their srcset
+                    .map((image) => image.srcset)
+                    .join(', ');
+                
+                const scaledSrcset = formatEntries
+                    // We don't need the placeholder image in the srcset
+                    // We also only want the hidpi scaled images
+                    .filter((image) => image.width !== ImageWidths.PLACEHOLDER && image.filename.includes("-hidpiscaled-"))
+                    // .filter((image) => image.width !== ImageWidths.PLACEHOLDER && (image.filename.includes("-hidpiscaled-") || image.width >= originalWidth))
                     // All non-placeholder images get mapped to their srcset
                     .map((image) => image.srcset)
                     .join(', ');
 
                 if (lazy) {
-                    return `<source type="${sourceType}" srcset="${placeholderSrcset}" data-srcset="${actualSrcset}" data-sizes="${sizes}">`;
+                    return `<source media="(-webkit-min-device-pixel-ratio: 1.5)" type="${sourceType}" srcset="${placeholderSrcset}" data-srcset="${scaledSrcset}" data-sizes="${sizes}">\n<source type="${sourceType}" srcset="${placeholderSrcset}" data-srcset="${unscaledSrcset}" data-sizes="${sizes}">`;
                 }
                 else {
-                    return `<source type="${sourceType}" src="${placeholderSrcset}" srcset="${actualSrcset}" sizes="${sizes}">`;
+                    return `<source media="(-webkit-min-device-pixel-ratio: 1.5)" type="${sourceType}" src="${placeholderSrcset}" srcset="${scaledSrcset}" sizes="${sizes}">\n<source type="${sourceType}" src="${placeholderSrcset}" srcset="${unscaledSrcset}" sizes="${sizes}">`;
                 }
             })
             .join('\n')}
@@ -148,8 +218,6 @@ const highlightShortcode = (
 };
 
 module.exports = function (config) {
-    // config.addPlugin(pluginSyntaxHighlight);
-
     // Date filter (localized)
     config.addNunjucksFilter("date", function (date, format, locale) {
         locale = locale ? locale : "en";
