@@ -30,6 +30,7 @@
 
 ## Learning/Referenced Resources
 
+- [11ty/eleventy-base-blog (Github Repo)](https://github.com/11ty/eleventy-base-blog)
 - [Webstoemp/Jérôme Coupé - Multi-lingual Sites with Eleventy (Blog Post)](https://www.webstoemp.com/blog/multilingual-sites-eleventy/)
 - [lea37/eleventy-multilingual (Github Repo)](https://github.com/lea37/eleventy-multilingual/)
 - [marcamos/jet (Github Repo)](https://github.com/marcamos/jet)

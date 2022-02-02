@@ -8,8 +8,13 @@ const ImageWidths = {
     PLACEHOLDER: 24,
 };
 
-// TODO: add image caption
-// TODO: add image credit
+// TODO: add toggle for hi-dpi images
+// TODO: do more testing on hi-dpi scaling (uses around double file size still and kinda looks worse?)
+// TODO: add image cropping (keep 2:1, crop to center)
+// TODO: add image caption (barebones done)
+// TODO: add image credit (barebones done)
+// TODO: add basic template system (to auto generate overlay for open graph)
+// TODO: add watermark/overlay options
 // TODO: add portfolio-like click on image to view larger + hover to zoom
 // TODO: add option to view original whilst view is focused on image (instead of
 //       auto-streaming the image, its much better for bandwidth + firefox can't
@@ -21,13 +26,14 @@ const ImageWidths = {
 const imageShortcode = async (
     lazy,
     src,
-    alt,
-    caption,
-    fileName,
-    urlPath,
-    credit,
+    alt = "",
+    caption = "",
+    credit = "",
+    creditUrl = "",
+    fileName = "",
+    urlPath = "",
     unscaledWidths = [400, 800, 1200, 1600, 2000, 2400],
-    scaledWidths = [800, 1200, 1600, 2000, 2400],
+    scaledWidths = [800, 1200, 1600, 2000, 2400, 3600],
     baseFormat = 'jpeg',
     optimizedFormats = ['avif', 'webp'],
     sizes = '100vw'
@@ -142,6 +148,7 @@ const imageShortcode = async (
     scaledWidths.push(originalWidth);
     sharedWidths.push(originalWidth);
 
+    // Add `scaledImageMetadata` to shared `imageMetadata`
     for (keyIndex in Object.keys(imageMetadata))
     {
         let key = Object.keys(imageMetadata)[keyIndex];
@@ -172,16 +179,16 @@ const imageShortcode = async (
         src="${formatSizes[baseFormat].placeholder.url}"
         data-src="${formatSizes[baseFormat].largest.url}"
         width="${width}"
-        height="${height}" ${alt != undefined && alt != "" ? "alt=" + '"' + alt + '"' + ' ' : ""}
+        height="${height}" ${alt != "" ? "alt=" + '"' + alt + '"' + ' ' : ""}
         class="lazy-img"
         loading="lazy">`;
 
     const normalImg = `<img
         src="${formatSizes[baseFormat].largest.url}"
         width="${width}"
-        height="${height}"${alt != undefined && alt != "" ? " alt=" + '"' + alt + '"' : ""}>`;
+        height="${height}"${alt != "" ? " alt=" + '"' + alt + '"' : ""}>`;
 
-    const picture = `<picture${lazy ? " class=" + '"' + "lazy-picture" + '"' : ""}>
+    let picture = `<picture${lazy ? " class=" + '"' + "lazy-picture" + '"' : ""}>
     ${Object.values(imageMetadata)
             // Map each format to the source HTML markup
             .map((formatEntries) => {
@@ -220,6 +227,24 @@ const imageShortcode = async (
             .join('\n')}
     ${lazy ? lazyImg + "<noscript>" + normalImg + "</noscript>" : normalImg}
     </picture>`;
+
+    if (caption != "")
+    {
+        // Add caption
+        picture += `\n<h1>${caption}</h1>`;
+    }
+    
+    if (credit != "")
+    {
+        if (creditUrl != "")
+        {
+            // Add clickable credit
+            picture += `\n<h1><a class="text-orange-500" href="${creditUrl}">${credit}</a></h1>`;
+        } else {
+            // Add credit
+            picture += `\n<h1>${credit}</h1>`;
+        }
+    }
 
     return picture;
 };

@@ -1,0 +1,13 @@
+---
+title: Blog Tags List
+permalink: /{{ locale }}/tags/
+translationKey: "blog-tags-list"
+---
+
+{% extends "layouts/base.njk" %}
+
+{% block content %}
+<h1>Tags</h1>
+{% set tags = collections.blogtags_en | reverse %}
+{% include "partials/blog-tags.njk" %}
+{% endblock %}

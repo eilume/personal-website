@@ -1,5 +1,5 @@
 ---
-pageTitle: Archives
+title: Home
 permalink: "/{{ locale }}/index.html"
 translationKey: "homepage"
 ---
@@ -7,19 +7,5 @@ translationKey: "homepage"
 {% extends "layouts/base.njk" %}
 
 {% block content %}
-  <h2 class="title">Posts</h2>
-  {% for post in collections.blogposts_en %}
-    {% if loop.first %}<ul class="post-list">{% endif %}
-      <li>
-        <article>
-          <a href="{{ post.url }}" class="post u-flex u-justify-between">
-            <h3 class="text-blue-700">{{ post.data.title }}</h3>
-            <time datetime="{{ post.date | date('Y-MM-DD') }}">{{ post.date | date("DD MMMM[,] Y", locale) }}</time>
-          </a>
-        </article>
-      </li>
-
-    {% if loop.last %}</ul>{% endif %}
-  {% endfor %}
-
+<p>Home Page</p>
 {% endblock %}

@@ -1,5 +1,5 @@
 ---
-pageTitle: Blog
+title: Blog Posts
 permalink: "/{{ locale }}/blog/index.html"
 translationKey: "blogpage"
 ---
@@ -7,18 +7,11 @@ translationKey: "blogpage"
 {% extends "layouts/base.njk" %}
 
 {% block content %}
-
-  <h2 class="title">Blogposts archive</h2>
-  {% for post in collections.blogposts_en %}
-    {% if loop.first %}<ul class="post-list">{% endif %}
-      <li>
-        <article class="post u-flex u-justify-between">
-          <h3><a href="{{ post.url }}">{{ post.data.title }}</a></h3>
-          <time datetime="{{ post.date | date('Y-MM-DD') }}">{{ post.date | date("DD MMMM[,] Y", locale) }}</time>
-        </article>
-      </li>
-
-    {% if loop.last %}</ul>{% endif %}
-  {% endfor %}
-
+  <h2 class="text-2xl">Blog Tags</h2>
+  {% set tags = collections.blogtags_en | reverse %}
+  {% include "partials/blog-tags.njk" %}
+  <br>
+  <h2 class="text-2xl">Blog Posts</h2>
+  {% set postslist = collections.blogposts_en %}
+  {% include "partials/blog-list.njk" %}
 {% endblock %}

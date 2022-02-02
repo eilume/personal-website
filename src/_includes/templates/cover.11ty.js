@@ -5,7 +5,8 @@ module.exports = (cover) => {
     // TODO: generate open-graph specific images too
     if (cover.path != undefined)
     {
-        console.log(`[${chalk.yellow.bold("Cover")}] ${chalk.bgRedBright.bold("TODO:")} add photo credit somewhere: ${cover.credit}`);
-        return imageShortcode(false, cover.path, cover.alt != undefined ? cover.alt : "");
+        let locale = cover.page.filePathStem.match(/\/content\/([a-zA-Z-]+)\//)[1];
+
+        return imageShortcode(false, cover.path, cover.alt != undefined ? cover.alt : "", cover.caption != undefined ? cover.caption : "", cover.credit != undefined ? cover.credit : "", cover.creditUrl != undefined ? cover.creditUrl : "", `cover-${locale}`, `/content/image/blog/${cover.page.fileSlug}/`);
     }
 };

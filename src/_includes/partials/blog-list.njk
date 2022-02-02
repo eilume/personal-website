@@ -1,0 +1,26 @@
+{# <ol reversed class="postlist" style="counter-reset: start-from {{ (postslistCounter or postslist.length) + 1 }}">
+{% for post in postslist | reverse %}
+  <li class="postlist-item{% if post.url == url %} postlist-item-active{% endif %}">
+    <a href="{{ post.url | url }}" class="postlist-link">{% if post.data.title %}{{ post.data.title }}{% else %}<code>{{ post.url }}</code>{% endif %}</a>
+    <time class="postlist-date" datetime="{{ post.date | htmlDateString }}">{{ post.date | readableDate }}</time>
+    {% for tag in post.data.tags | filterTagList %}
+      {% set tagUrl %}/tags/{{ tag | slug }}/{% endset %}
+      <a href="{{ tagUrl | url }}" class="post-tag">{{ tag }}</a>
+    {% endfor %}
+  </li>
+{% endfor %}
+</ol> #}
+{% for post in postslist %}
+    {% if loop.first %}<ul class="flex space-x-4">{% endif %}{% if (not post.data.draft) and (not post.data.private) %}
+      <li>
+        <article>
+          <p>Draft: {{ post.data.draft }}</p>
+          <p>Private: {{ post.data.private }}</p>
+          <h3 class="text-xl"><a class="text-cyan-500" href="{{ post.url }}">{{ post.data.title }}</a></h3>
+          {% set tags = post.data.tags %}
+          {% include "partials/blog-tags.njk" %}
+          <time datetime="{{ post.date | date('Y-MM-DD') }}">{{ post.date | date("DD MMMM[,] Y", locale) }}</time>
+        </article>
+      </li>
+    {% endif %}{% if loop.last %}</ul>{% endif %}
+{% endfor %}

@@ -6,7 +6,7 @@ eleventyExcludeFromCollections: true
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{% for page in collections.all %} {% if (not page.data.draft) and (not page.data.private) %}
     <url>
         <loc>{{ site.baseUrl }}{{ page.url | url }}</loc>
-        <lastmod>{{ page.date.toISOString() }}</lastmod>
+        <lastmod>{{ page.data.lastModified.toISOString() if page.data.lastModified else page.date.toISOString() }}</lastmod>
         <changefreq>{{ page.data.changeFreq if page.data.changeFreq else "daily" }}</changefreq>
     </url>{% endif %} {% endfor %}
 </urlset>

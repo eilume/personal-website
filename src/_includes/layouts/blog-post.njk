@@ -1,8 +1,9 @@
 {% extends "layouts/base.njk" %}
 
 {% block content %}
-    <a href="/{{ locale }}/" class="back">← {{ site[locale].back }}</a>
+    {# <a href="/{{ locale }}/blog/" class="back">← {{ site[locale].back }}</a> #}
     <h1 class="text-2xl text-rose-500">{{ title }}</h1>
+    {% include "partials/blog-tags.njk"%}
     {% renderFile "./src/_includes/templates/cover.11ty.js", cover %}
     {{ content | safe }}
 {% endblock %}
