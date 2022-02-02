@@ -25,43 +25,6 @@ function getFilteredFiles(startPath, filter, outputList) {
 let htmlFiles = [];
 getFilteredFiles("./dist", ".html", htmlFiles);
 
-let publicJSFiles = [];
-let distJSFiles = [];
-getFilteredFiles("./public/assets/js", ".js", publicJSFiles);
-getFilteredFiles("./dist/assets", ".js", distJSFiles);
-
-for (let h = 0; h < htmlFiles.length; h++) {
-    let htmlFile = fs.readFileSync(htmlFiles[h], "utf-8").toString();
-    let updatedFile = false;
-
-    for (let pj = 0; pj < publicJSFiles.length; pj++) {
-        let publicJSFilePath = publicJSFiles[pj].replace("public/", "");
-        let publicJSFileName = path.basename(publicJSFiles[pj]).replace(".js", "");
-
-        let distJSFilePath = "";
-
-        for (let dj = 0; dj < distJSFiles.length; dj++) {
-            if (path.basename(distJSFiles[dj]).includes(publicJSFileName)) {
-                distJSFilePath = distJSFiles[dj].replace("dist/", "");
-                break;
-            }
-        }
-
-        if (distJSFilePath != "") {
-            let pathRegex = new RegExp("\/", "g");
-            let fileRegex = new RegExp("(" + publicJSFilePath.replace(pathRegex, "\\/") + ")", "g");
-
-            htmlFile = htmlFile.replace(fileRegex, distJSFilePath);
-
-            updatedFile = true;
-        }
-    }
-
-    if (updatedFile) {
-        fs.writeFileSync(htmlFiles[h], htmlFile, "utf-8");
-    }
-}
-
 let publicCSSFiles = [];
 let distCSSFiles = [];
 getFilteredFiles("./public/assets/css", ".css", publicCSSFiles);
@@ -89,6 +52,43 @@ for (let h = 0; h < htmlFiles.length; h++) {
             let fileRegex = new RegExp("(" + publicCSSFilePath.replace(pathRegex, "\\/") + ")", "g");
 
             htmlFile = htmlFile.replace(fileRegex, distCSSFilePath);
+
+            updatedFile = true;
+        }
+    }
+
+    if (updatedFile) {
+        fs.writeFileSync(htmlFiles[h], htmlFile, "utf-8");
+    }
+}
+
+let publicJSFiles = [];
+let distJSFiles = [];
+getFilteredFiles("./public/assets/js", ".js", publicJSFiles);
+getFilteredFiles("./dist/assets", ".js", distJSFiles);
+
+for (let h = 0; h < htmlFiles.length; h++) {
+    let htmlFile = fs.readFileSync(htmlFiles[h], "utf-8").toString();
+    let updatedFile = false;
+
+    for (let pj = 0; pj < publicJSFiles.length; pj++) {
+        let publicJSFilePath = publicJSFiles[pj].replace("public/", "");
+        let publicJSFileName = path.basename(publicJSFiles[pj]).replace(".js", "");
+
+        let distJSFilePath = "";
+
+        for (let dj = 0; dj < distJSFiles.length; dj++) {
+            if (path.basename(distJSFiles[dj]).includes(publicJSFileName)) {
+                distJSFilePath = distJSFiles[dj].replace("dist/", "");
+                break;
+            }
+        }
+
+        if (distJSFilePath != "") {
+            let pathRegex = new RegExp("\/", "g");
+            let fileRegex = new RegExp("(" + publicJSFilePath.replace(pathRegex, "\\/") + ")", "g");
+
+            htmlFile = htmlFile.replace(fileRegex, distJSFilePath);
 
             updatedFile = true;
         }

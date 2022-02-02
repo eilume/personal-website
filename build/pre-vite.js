@@ -34,22 +34,23 @@ getFilteredFiles("./public", ".html", filePaths);
 
 let outputString = "";
 for (let i = 0; i < filePaths.length; i++) {
-    let key = filePaths[i].replace(/[\/]/g, "_").replace("_index.html", "_html").replace(".css", "_css").replace(".js", "_js");
+    let key = filePaths[i].replace(/[\/]/g, "_").replace("_index.html", "_html");
 
     outputString += `'${key}': resolve(__dirname, '${filePaths[i]}'), `;
 }
+
+outputString += "'custom_css': resolve(__dirname, 'public/assets/css/custom.css'), ";
+outputString += "'styles_css': resolve(__dirname, 'public/assets/css/styles.css'), ";
+outputString += "'no-script_css': resolve(__dirname, 'public/assets/css/no-script.css'), ";
 
 filePaths = [];
 getFilteredFiles("./public/assets/js", ".js", filePaths);
 
 for (let i = 0; i < filePaths.length; i++) {
-    let key = path.basename(filePaths[i]).replace(/[\/]/g, "_").replace(".js", '');
+    let key = path.basename(filePaths[i]).replace(/[\/]/g, "_").replace(".js", '_js');
 
     outputString += `'${key}': resolve(__dirname, '${filePaths[i]}'), `;
 }
-
-outputString += "styles: resolve(__dirname, 'public/assets/css/styles.css'), ";
-outputString += "'no-script': resolve(__dirname, 'public/assets/css/no-script.css')";
 
 let replaceValue = replaceString.replace(replaceSubstring, " " + outputString + " ");
 

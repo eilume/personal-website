@@ -5,9 +5,11 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
+		<!-- TODO: remove once site is public + update robots.txt -->
 		<meta name="robots" content="noindex">
 		
 		<title>{{ site.titlePrefix }}{{ title if title else site[locale].metaTitle }}</title>
+		<meta name="title" content="{{ site.titlePrefix }}{{ title if title else site[locale].metaTitle }}"/>
 		<meta name="description" content="{{ description if description else site[locale].metaDescription }}"/>
 		
 		<!-- Favicon -->
@@ -26,21 +28,20 @@
 		<noscript><link rel="stylesheet" href="{{ '/assets/css/no-script.css' | url }}"></noscript>
 
 		<!-- Open Graph -->
-		<meta property="og:url" content="{{ site.baseUrl }}{{ page.url | url }}">
 		<meta property="og:type" content="website">
+		<meta property="og:url" content="{{ site.baseUrl }}{{ page.url | url }}">
+		<meta property="og:site_name" content="{{ site.name }}">
 		<meta property="og:title" content="{{ site.titlePrefix }}{{ title if title else site[locale].metaTitle }}">
 		<meta property="og:description" content="{{ description if description else site[locale].metaDescription }}">
-		<meta property="og:image" content="{{ cover if cover else site.baseImage  }}">
-		<meta property="og:site_name" content="{{ site.name }}">
-		
-		<!-- Twitter -->
-		<meta name="twitter:card" content="summary_large_image">
-		<meta property="twitter:domain" content="{{ site.domain }}">
-		<meta property="twitter:url" content="{{ site.baseUrl }}{{ page.url | url }}">
-		<meta name="twitter:site" content="{{ site.twitter }}">
-		<meta name="twitter:title" content="{{ site.titlePrefix }}{{ title if title else site[locale].metaTitle }}">
-		<meta name="twitter:description" content="{{ description if description else site[locale].metaDescription }}">
-		<meta name="twitter:image" content="{{ cover if cover else site.baseImage }}">
+		<meta property="og:image" content="{{ site.baseUrl }}{{( cover.path if cover.path else site.defaultOpenGraphImage ) | url}}">
+		<meta property="og:image:alt" content="{{( cover.alt if cover.alt else "" ) if cover.path else site.defaultOpenGraphImageAlt }}">
+		<meta property="og:image:width" content="1280">
+		<meta property="og:image:height" content="640">
+		<meta property="article:publisher" content="{{ site.domain }}">
+		<meta property="article:section" content="{{ section }}">
+		<meta property="article:tag" content="{{ tags[0] }}">
+		<meta property="twitter:card" content="summary_large_image">
+		<meta property="twitter:site" content="{{ site.twitter }}">
 	</head>
 	
 	<body {% if templateClass %} class="{{ templateClass }}" {% endif %}>
@@ -53,6 +54,6 @@
 		</main>
 		{% include "partials/footer.njk" %}
 		<script defer src="{{ '/assets/js/prism.js' | url }}" type="module"></script>
-		<script defer src="{{ '/assets/js/app.js' | url }}" type="module"></script>
+		<script defer src="{{ '/assets/js/app.js' | url }}"></script>
 	</body>
 </html>
