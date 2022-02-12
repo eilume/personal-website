@@ -11,14 +11,14 @@ pagination:
   addAllPagesToCollections: true
 eleventyComputed:
     title: Blog Tag “{{ tag }}”
-permalink: /{{ locale }}/tags/{{ tag | slug }}/
+permalink: /{{ locale }}/tags/{{ tag | slugify }}/
 translationKey: "blog-tags"
 ---
 
 {% extends "layouts/base.njk" %}
 
 {% block content %}
-<h1>Tagged “{{ tag }}”</h1>
+<h1>Tagged “{{ tag | slugify }}”</h1>
 {% set postslist = collections[ tag ] | reverse %}
 {% include "partials/blog-list.njk" %}
 {% set tagListUrl %}/{{ locale }}/tags/{% endset %}

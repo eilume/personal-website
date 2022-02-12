@@ -1,1 +1,6 @@
-/ /en/ 301
+# Default redirect
+/       /en/           301
+/*      /404.html      404
+
+# 404 Redirects
+/en/*   /en/404.html   404

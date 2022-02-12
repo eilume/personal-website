@@ -1,7 +1,7 @@
 module.exports = {
   buildTime: new Date(),
-  domain: "eilume.netlify.app",
-  baseUrl: "https://eilume.netlify.app",
+  domain: "eilu.me",
+  baseUrl: "https://eilu.me",
   name: "eilume's Personal Website",
   twitter: "@eilume",
   titlePrefix: "eilume :: ",

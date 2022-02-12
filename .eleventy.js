@@ -66,7 +66,9 @@ module.exports = function (config) {
         let tagSet = new Set();
         // TODO: figure out if i can reuse `blogposts_en` collection, instead of "recreating" it
         collection.getFilteredByGlob("./src/content/en/blog/*.md").filter(publishedPosts).forEach(item => {
-            (item.data.tags || []).forEach(tag => tagSet.add(tag));
+            (item.data.tags || []).forEach(tag => {
+                tagSet.add(tag);
+            });
         });
     
         return filterTagList([...tagSet]);
