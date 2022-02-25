@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "description": "A simple website for all the stuff I'm up to.",
   "scripts": {
-    "clean": "rimraf dist",
+    "clean": "npm-run-all clean-public clean-dist",
+    "clean-dist": "rimraf dist",
+    "clean-public": "rimraf public",
     "start:tailwind": "npx tailwindcss -i src/assets/css/tailwind.css -o public/assets/css/styles.css --watch",
     "start:eleventy": "eleventy --serve",
     "build:tailwind": "npx tailwindcss -i src/assets/css/tailwind.css -o public/assets/css/styles.css --minify",
@@ -11,8 +13,8 @@
     "build:pre-vite": "node build/pre-vite.js",
     "build:vite": "vite build",
     "build:post-vite": "node build/post-vite.js",
-    "start": "npm-run-all clean --parallel start:*",
-    "build": "NODE_ENV=production npm-run-all clean build:tailwind build:eleventy build:pre-vite build:vite build:post-vite"
+    "start": "npm-run-all --parallel start:*",
+    "build": "NODE_ENV=production npm-run-all clean-dist build:tailwind build:eleventy build:pre-vite build:vite build:post-vite"
   },
   "keywords": [],
   "author": "eilume",
@@ -40,9 +42,12 @@
     "@11ty/eleventy-navigation": "^0.3.2",
     "@11ty/eleventy-plugin-rss": "^1.1.2",
     "autoprefixer": "^10.4.0",
+    "canvas": "^2.9.0",
     "chalk": "^4.1.2",
     "fs-extra": "^10.0.0",
     "postcss-import": "^14.0.2",
+    "sharp": "^0.30.1",
+    "skia-canvas": "^0.9.29",
     "vite": "^2.7.2",
     "vite-plugin-compress": "^2.1.0"
   }

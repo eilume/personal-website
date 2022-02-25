@@ -99,6 +99,14 @@ for (let h = 0; h < htmlFiles.length; h++) {
     }
 }
 
+let openGraphImageFiles = [];
+getFilteredFiles("./public", "open-graph.jpeg", openGraphImageFiles);
+
+for (let i = 0 ; i < openGraphImageFiles.length; i++)
+{
+    fs.copyFileSync(`./${openGraphImageFiles[i]}`, `./${openGraphImageFiles[i].replace("public/", "dist/")}`);
+}
+
 fs_extra.copySync("./public/content/image/", "./dist/content/image/");
 
 fs.copyFileSync("./public/_redirects", "./dist/_redirects");

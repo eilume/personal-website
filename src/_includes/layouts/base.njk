@@ -33,7 +33,8 @@
 		<meta property="og:site_name" content="{{ site.name }}">
 		<meta property="og:title" content="{{ site.titlePrefix }}{{ title if title else site[locale].metaTitle }}">
 		<meta property="og:description" content="{{ description if description else site[locale].metaDescription }}">
-		<meta property="og:image" content="{{ site.baseUrl }}{{( cover.path if cover.path else site.defaultOpenGraphImage ) | url}}">
+		{% set openGraphData = { url: site.baseUrl, cover: cover, title: title if title else site[locale].metaTitle, description: description if description else "" } %}
+		{% renderFile "./src/_includes/templates/open-graph-image.11ty.js", openGraphData %}
 		<meta property="og:image:alt" content="{{( cover.alt if cover.alt else "" ) if cover.path else site.defaultOpenGraphImageAlt }}">
 		<meta property="og:image:width" content="1280">
 		<meta property="og:image:height" content="640">

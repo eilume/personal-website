@@ -2,6 +2,8 @@ const pluginImage = require("@11ty/eleventy-img");
 const path = require("path");
 const fs = require("fs");
 const chalk = require("chalk");
+const log = require("../../log");
+const config = require("../_data/config");
 
 const ImageWidths = {
     ORIGINAL: null,
@@ -68,11 +70,17 @@ const imageShortcode = async (
         }
     }
 
-    let sharedWidths = Array.from(new Set(unscaledWidths.concat(scaledWidths)));
+    let sharedWidths;
+    if (config.imageShortcode.includeHiDpi)
+    {
+        sharedWidths = Array.from(new Set(unscaledWidths.concat(scaledWidths)));
+    } else {
+        sharedWidths = Array.from(new Set(unscaledWidths));
+    }
     let originalWidth;
     let baseFileHash;
 
-    console.log(`[${chalk.blue.bold("Shortcode : Image")}] Generating images for '${imgName}'`);
+    log("Shortcode : Image", "info", `Generating images for '${chalk.green(imgName)}'`);
 
     // Generate unscaled images
     const imageMetadata = await pluginImage(fullSrc, {
@@ -108,52 +116,59 @@ const imageShortcode = async (
         },
     });
 
-    // Generate scaled images with lower quality because of device pixel ratio resulting in super-sampling
-    const scaledImageMetadata = await pluginImage(fullSrc, {
-        // widths: [ImageWidths.ORIGINAL, ...scaledWidths],
-        widths: [...scaledWidths],
-        formats: [...optimizedFormats, baseFormat],
-        sharpJpegOptions: { quality: 45, }, // options passed to the Sharp jpeg output method
-        sharpPngOptions: { quality: 65, }, // options passed to the Sharp png output method
-        sharpWebpOptions: { quality: 45 }, // options passed to the Sharp webp output method
-        sharpAvifOptions: { quality: 30 }, // options passed to the Sharp avif output method
-        outputDir: path.join('public', imgDir),
-        urlPath: imgDir,
-        filenameFormat: (hash, _src, width, format) => {
-            let suffix;
-            switch (width) {
-                case ImageWidths.PLACEHOLDER:
-                    suffix = 'placeholder';
-                    break;
+    if (config.imageShortcode.includeHiDpi)
+    {
+        // Generate scaled images with lower quality because of device pixel ratio resulting in super-sampling
+        const scaledImageMetadata = await pluginImage(fullSrc, {
+            // widths: [ImageWidths.ORIGINAL, ...scaledWidths],
+            widths: [...scaledWidths],
+            formats: [...optimizedFormats, baseFormat],
+            sharpJpegOptions: { quality: 45, }, // options passed to the Sharp jpeg output method
+            sharpPngOptions: { quality: 65, }, // options passed to the Sharp png output method
+            sharpWebpOptions: { quality: 45 }, // options passed to the Sharp webp output method
+            sharpAvifOptions: { quality: 30 }, // options passed to the Sharp avif output method
+            outputDir: path.join('public', imgDir),
+            urlPath: imgDir,
+            filenameFormat: (hash, _src, width, format) => {
+                let suffix;
+                switch (width) {
+                    case ImageWidths.PLACEHOLDER:
+                        suffix = 'placeholder';
+                        break;
 
-                default:
-                    let isOriginalWidth = true;
-                    for (let i = 0; i < sharedWidths.length; i++) {
-                        if (width === sharedWidths[i]) {
-                            isOriginalWidth = false;
-                            suffix = width;
-                        } else {
-                            originalWidth = width;
+                    default:
+                        let isOriginalWidth = true;
+                        for (let i = 0; i < sharedWidths.length; i++) {
+                            if (width === sharedWidths[i]) {
+                                isOriginalWidth = false;
+                                suffix = width;
+                            } else {
+                                originalWidth = width;
+                            }
                         }
-                    }
 
-                    if (isOriginalWidth) suffix = 'original';
-            }
+                        if (isOriginalWidth) suffix = 'original';
+                }
 
-            return `${imgName}-${baseFileHash}-hidpiscaled-${suffix}.${format}`;
-        },
-    });
+                return `${imgName}-${baseFileHash}-hidpiscaled-${suffix}.${format}`;
+            },
+        });
+    }
 
     unscaledWidths.push(originalWidth);
-    scaledWidths.push(originalWidth);
     sharedWidths.push(originalWidth);
-
-    // Add `scaledImageMetadata` to shared `imageMetadata`
-    for (keyIndex in Object.keys(imageMetadata))
+    
+    if (config.imageShortcode.includeHiDpi)
     {
-        let key = Object.keys(imageMetadata)[keyIndex];
+        scaledWidths.push(originalWidth);
 
-        scaledImageMetadata[key].forEach((value) => {imageMetadata[key].push(value)});
+        // Add `scaledImageMetadata` to shared `imageMetadata`
+        for (keyIndex in Object.keys(imageMetadata))
+        {
+            let key = Object.keys(imageMetadata)[keyIndex];
+
+            scaledImageMetadata[key].forEach((value) => {imageMetadata[key].push(value)});
+        }
     }
 
     // Map each unique format (e.g., jpeg, webp) to its smallest and largest images
@@ -205,7 +220,9 @@ const imageShortcode = async (
                     .map((image) => image.srcset)
                     .join(', ');
                 
-                let scaledSrcset = formatEntries
+                if (config.imageShortcode.includeHiDpi)
+                {
+                    let scaledSrcset = formatEntries
                     // We don't need the placeholder image in the srcset
                     // We also only want the hidpi scaled images
                     .filter((image) => image.width !== ImageWidths.PLACEHOLDER && image.filename.includes("-hidpiscaled-"))
@@ -213,15 +230,24 @@ const imageShortcode = async (
                     // All non-placeholder images get mapped to their srcset
                     .map((image) => image.srcset)
                     .join(', ');
-
-                // Replace hidpi scaled original with normal, better quality original
-                // scaledSrcset = scaledSrcset.replace("-hidpiscaled-original", "-original");
-
-                if (lazy) {
-                    return `<source media="(-webkit-min-device-pixel-ratio: 1.5)" type="${sourceType}" srcset="${placeholderSrcset}" data-srcset="${scaledSrcset}" data-sizes="${sizes}">\n<source type="${sourceType}" srcset="${placeholderSrcset}" data-srcset="${unscaledSrcset}" data-sizes="${sizes}">`;
+                    
+                    // Replace hidpi scaled original with normal, better quality original
+                    // scaledSrcset = scaledSrcset.replace("-hidpiscaled-original", "-original");
+                    
+                    if (lazy) {
+                        return `<source media="(-webkit-min-device-pixel-ratio: 1.5)" type="${sourceType}" srcset="${placeholderSrcset}" data-srcset="${scaledSrcset}" data-sizes="${sizes}">\n<source type="${sourceType}" srcset="${placeholderSrcset}" data-srcset="${unscaledSrcset}" data-sizes="${sizes}">`;
+                    }
+                    else {
+                        return `<source media="(-webkit-min-device-pixel-ratio: 1.5)" type="${sourceType}" src="${placeholderSrcset}" srcset="${scaledSrcset}" sizes="${sizes}">\n<source type="${sourceType}" src="${placeholderSrcset}" srcset="${unscaledSrcset}" sizes="${sizes}">`;
+                    }
                 }
                 else {
-                    return `<source media="(-webkit-min-device-pixel-ratio: 1.5)" type="${sourceType}" src="${placeholderSrcset}" srcset="${scaledSrcset}" sizes="${sizes}">\n<source type="${sourceType}" src="${placeholderSrcset}" srcset="${unscaledSrcset}" sizes="${sizes}">`;
+                    if (lazy) {
+                        return `<source type="${sourceType}" srcset="${placeholderSrcset}" data-srcset="${unscaledSrcset}" data-sizes="${sizes}">`;
+                    }
+                    else {
+                        return `<source type="${sourceType}" src="${placeholderSrcset}" srcset="${unscaledSrcset}" sizes="${sizes}">`;
+                    }
                 }
             })
             .join('\n')}
