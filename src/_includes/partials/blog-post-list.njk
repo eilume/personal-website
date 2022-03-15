@@ -1,0 +1,25 @@
+<ul class="flex space-x-4">
+	{% set blogCount = 0 %}
+	{% for post in postslist %}
+		{% if (not post.data.draft) and (not post.data.private) %}
+			<li>
+				<article>
+					<h3 class="text-xl">
+						<a class="text-cyan-500" href="{{ post.url }}">
+							{{ post.data.title }}
+						</a>
+					</h3>
+					{% set tags = post.data.tags %}
+					{% include "partials/blog-post-tags.njk" %}
+					<time datetime="{{ post.date | date('Y-MM-DD') }}">
+						{{ post.date | date("DD MMMM[,] Y", locale) }}
+					</time>
+				</article>
+			</li>
+		{% set blogCount = blogCount + 1 %}
+		{% endif %}
+	{% endfor %}
+</ul>
+{% if blogCount == 0 %}
+	<p>No posts!</p>
+{% endif %}

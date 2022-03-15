@@ -1,18 +1,24 @@
 {% for lgg in site.languages %}
-  {% if loop.first %}<ul class="language-switch">{% endif %}
-  {# set translatedUrl to the homepage of that language by default #}
-  {% set translatedUrl = "/" + lgg.code + "/" %}
-  {# set current language class #}
-  {% set activeClass = "language-switch-active" if lgg.code == locale else "" %}
-  {# loop through all the content of the site #}
-  {% for item in collections.all %}
-    {# check matches #}
-    {% if item.data.translationKey == translationKey and item.data.locale == lgg.code %}
-      {% set translatedUrl = item.url %}
-    {% endif %}
-  {% endfor%}
-  <li class="language-switch-item {{ activeClass }}">
-    <a class="language-switch-link" href="{{ translatedUrl }}">{{ lgg.code }}</a>
-  </li>
-  {% if loop.last %}</ul>{% endif %}
+	{% if loop.first %}
+		<ul class="language-switch">
+	{% endif %}
+	{# set translatedUrl to the homepage of that language by default #}
+	{% set translatedUrl = "/" + lgg.code + "/" %}
+	{# set current language class #}
+	{% set activeClass = "language-switch-active" if lgg.code == locale else "" %}
+	{# loop through all the content of the site #}
+	{% for item in collections.all %}
+		{# check matches #}
+		{% if item.data.translationKey == translationKey and item.data.locale == lgg.code %}
+			{% set translatedUrl = item.url %}
+		{% endif %}
+	{% endfor%}
+	<li class="language-switch-item {{ activeClass }}">
+		<a class="language-switch-link" href="{{ translatedUrl }}">
+			{{ lgg.code }}
+		</a>
+	</li>
+	{% if loop.last %}
+		</ul>
+	{% endif %}
 {% endfor %}

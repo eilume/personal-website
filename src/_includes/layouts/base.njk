@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ locale }}">
+<html lang="{{ locale }}" class="dark">
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,7 +21,7 @@
 		<!-- TailwindCSS -->
 		<link href="{{ '/assets/css/styles.css' | url }}" rel="stylesheet" type="text/css">
 		<!-- Prism.js theme -->
-		<link href="{{ '/assets/css/prism.css' | url }}" rel="stylesheet" type="text/css">
+		<link href="{{ '/assets/css/prism-one-dark.css' | url }}" rel="stylesheet" type="text/css">
 		<!-- Custom styles/overrides -->
 		<link href="{{ '/assets/css/custom.css' | url }}" rel="stylesheet" type="text/css">
 		<!-- No script overrides -->
@@ -45,16 +45,19 @@
 		<meta property="twitter:site" content="{{ site.twitter }}">
 	</head>
 	
-	<body {% if templateClass %} class="{{ templateClass }}" {% endif %}>
-		{% include "partials/header.njk" %}
-		<main id="main-content" class="main">
-			<div class="inner">
-				{% block content %}
-				{% endblock %}
-			</div>
-		</main>
-		{% include "partials/footer.njk" %}
-		<script defer src="{{ '/assets/js/prism.js' | url }}" type="module"></script>
-		<script async src="{{ '/assets/js/app.js' | url }}"></script>
+	<body class="bg-main-light dark:bg-main-dark text-main-dark dark:text-main-light {% if templateClass %}{{ templateClass }}{% endif %}">
+		{# <div id="margins" class="w-full lg:w-4/5 mx-auto"> #}
+		<div id="margins" class="w-full px-2 lg:px-16 xl:px-32">
+			{% include "partials/header.njk" %}
+			<main id="main-content" class="main mt-16">
+				<div class="inner flex flex-col space-y-4">
+					{% block content %}
+					{% endblock %}
+				</div>
+			</main>
+			{% include "partials/footer.njk" %}
+			{# <script defer src="{{ '/assets/js/prism.js' | url }}" type="module"></script> #}
+			<script async src="{{ '/assets/js/app.js' | url }}"></script>
+		</div>
 	</body>
 </html>

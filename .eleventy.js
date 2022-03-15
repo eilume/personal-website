@@ -1,6 +1,7 @@
 const { DateTime } = require("luxon");
 const moment = require("moment");
 const { highlightShortcode, imageShortcode } = require("./src/_shortcodes");
+const syntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
 const { EleventyRenderPlugin } = require("@11ty/eleventy");
 const pluginRss = require("@11ty/eleventy-plugin-rss");
 const pluginNavigation = require("@11ty/eleventy-navigation");
@@ -11,6 +12,7 @@ module.exports = function (config) {
     const publishedPosts = (post) => post.date <= now && !post.data.draft && !post.data.private;
 
     // Plugins
+    config.addPlugin(syntaxHighlight);
     config.addPlugin(EleventyRenderPlugin);
     config.addPlugin(pluginRss);
     config.addPlugin(pluginNavigation);
@@ -53,7 +55,7 @@ module.exports = function (config) {
         return (tags || []).filter(tag => ["all", "nav", "post", "posts"].indexOf(tag) === -1);
     }
     
-    config.addFilter("filterTagList", filterTagList)
+    config.addFilter("filterTagList", filterTagList);
 
     // Collections
     // 'en' - Blog Posts
@@ -85,6 +87,14 @@ module.exports = function (config) {
 
     config.addPairedShortcode("highlight", highlightShortcode);
     config.addShortcode("image", imageShortcode);
+
+    config.addFilter("capitalizeFirst", function(value) {
+        return value.replace(/^\w/, (c) => c.toUpperCase());
+    });
+
+    config.addFilter("capitalizeAll", function(value) {
+        return value.trim().toLowerCase().replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
+    });
 
     return {
         passthroughFileCopy: true,

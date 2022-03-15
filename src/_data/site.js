@@ -13,9 +13,13 @@ module.exports = {
       code: "en"
     }
   ],
-  en: {
-    metaTitle: "Title",
-    metaDescription: "Description",
-    back: "Back"
+  translations: {
+    en: {
+      metaTitle: "Title",
+      metaDescription: "Description",
+      back: "Back",
+      language: "Language",
+      theme: "Theme"
+    }
   }
 };

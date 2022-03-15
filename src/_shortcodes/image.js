@@ -88,6 +88,10 @@ const imageShortcode = async (
         widths: [ImageWidths.PLACEHOLDER, ...unscaledWidths],
         // widths: [ImageWidths.PLACEHOLDER, ...unscaledWidths],
         formats: [...optimizedFormats, baseFormat],
+        sharpJpegOptions: { quality: 85, }, // options passed to the Sharp jpeg output method
+        sharpPngOptions: { quality: 75, }, // options passed to the Sharp png output method
+        sharpWebpOptions: { quality: 60 }, // options passed to the Sharp webp output method
+        sharpAvifOptions: { quality: 60 }, // options passed to the Sharp avif output method
         outputDir: path.join('public', imgDir),
         urlPath: imgDir,
         filenameFormat: (hash, _src, width, format) => {
@@ -195,7 +199,7 @@ const imageShortcode = async (
         data-src="${formatSizes[baseFormat].largest.url}"
         width="${width}"
         height="${height}" ${alt != "" ? "alt=" + '"' + alt + '"' + ' ' : ""}
-        class="lazy-img"
+        class="w-full lazy-img require-js"
         loading="lazy">`;
 
     const normalImg = `<img
@@ -203,7 +207,7 @@ const imageShortcode = async (
         width="${width}"
         height="${height}"${alt != "" ? " alt=" + '"' + alt + '"' : ""}>`;
 
-    let picture = `<picture${lazy ? " class=" + '"' + "lazy-picture" + '"' : ""}>
+    let picture = `<picture class="w-full${lazy ? " lazy-picture" : ""}">
     ${Object.values(imageMetadata)
             // Map each format to the source HTML markup
             .map((formatEntries) => {
@@ -253,26 +257,31 @@ const imageShortcode = async (
             .join('\n')}
     ${lazy ? lazyImg + "<noscript>" + normalImg + "</noscript>" : normalImg}
     </picture>`;
-
-    if (caption != "")
-    {
-        // Add caption
-        picture += `\n<h1>${caption}</h1>`;
-    }
     
     if (credit != "")
     {
+        picture += `<div class="absolute bottom-0 right-0 p-4 bg-main-dark bg-opacity-75 backdrop-blur-lg w-full sm:w-fit rounded-br-2xl rounded-bl-2xl sm:rounded-bl-none sm:rounded-tl-2xl">`;
+        
         if (creditUrl != "")
         {
             // Add clickable credit
-            picture += `\n<h1><a class="text-orange-500" href="${creditUrl}">${credit}</a></h1>`;
+            picture += `\n<a class="mx-auto sm:ml-auto flex text-main-light w-fit" href="${creditUrl}"><p class="font-medium">Image Source:&nbsp;<p class="font-bold">${credit}</p></p></a>`;
         } else {
             // Add credit
-            picture += `\n<h1>${credit}</h1>`;
+            picture += `\n<p class="ml-auto text-main-light font-medium">${credit}</p>`;
         }
+
+        picture += "</div>";
     }
 
-    return picture;
+    captionElement = "";
+    if (caption != "")
+    {
+        // Add caption
+        captionElement = `\n<p class="mt-4 text-center">${caption}</p>`;
+    }
+
+    return `<div><div class="image relative">${picture}</div>${captionElement}</div>`;
 };
 
 module.exports = imageShortcode;

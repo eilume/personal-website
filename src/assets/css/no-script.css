@@ -1,7 +1,7 @@
 noscript {
-    display: contents !important;
+	display: contents !important;
 }
 
-.lazy-img {
-    display: none !important;
+.require-js {
+	display: none !important;
 }

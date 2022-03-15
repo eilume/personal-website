@@ -1,0 +1,19 @@
+{% for tag in tags %}
+    {% if loop.first %}
+        <ul class="flex flex-wrap">
+    {% endif %}
+    <li class="flex text-lg">
+        <div class="flex mr-1">
+            <a class="flex whitespace-nowrap" href="/{{ locale }}/blog/tags/{{ tag | slugify }}/">
+                <p class="font-medium">#</p>
+                <p class="font-bold">{{ tag | slugify }}</p>
+            </a>
+            {% if not loop.last %}
+                ,
+            {% endif %}
+        </div>
+    </li>
+    {% if loop.last %}
+        </ul>
+    {% endif %}
+{% endfor %}

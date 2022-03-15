@@ -1,7 +1,0 @@
-{% for tag in tags %}
-    {% if loop.first %}<ul class="flex space-x-2">{% endif %}
-        <li>
-            <a class="text-pink-500" href="/{{ locale }}/tags/{{ tag | slugify }}/">#{{ tag | slugify }}</a>{% if not loop.last %},{% endif %}
-        </li>
-    {% if loop.last %}</ul>{% endif %}
-{% endfor %}

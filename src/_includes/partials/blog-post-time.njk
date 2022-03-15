@@ -1,0 +1,13 @@
+<div class="flex flex-col lg:flex-row text-lg whitespace-nowrap">
+    <div class="flex">
+        <p class="font-medium">Posted on&nbsp;</p>
+        <p class="font-bold">{{ date | htmlDateString }}</p>
+    </div>
+    {% if lastModified and not (lastModified == date) %}
+        <div class="flex">
+                <p class="font-medium hidden lg:block">.&nbsp;</p>
+                <p class="font-medium">Last updated&nbsp;</p>
+                <p class="font-bold">{{ lastModified | htmlDateString }}</p>
+        </div>
+    {% endif %}
+</div>
