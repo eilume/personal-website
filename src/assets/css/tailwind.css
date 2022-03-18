@@ -2,8 +2,6 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-@import url("../fonts/stylesheet.css");
-
 @layer base {
 	/* TODO: setup header class default sizes (for markdown content) */
 	h1 {

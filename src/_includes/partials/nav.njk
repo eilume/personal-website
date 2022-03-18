@@ -8,8 +8,8 @@
 				</a>
 			</li>
 		{% endfor %}
-		{# Language Dropdown #}
-		{# <div>
+		{# <!-- Language Dropdown -->
+		<div>
 			<input class="dropdown" type="checkbox" id="language-dropdown"/>
 			<label class="flex" for="language-dropdown">
 				Language
@@ -59,7 +59,9 @@
 					<path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
 				</svg>
 			</div>
+			<!-- Background -->
 			<div class="fixed top-0 left-0 w-full h-full z-10 bg-opacity-75 dark:bg-opacity-75 bg-main-light dark:bg-main-dark backdrop-blur-lg">
+				<!-- Menu Items -->
 				<ul class="flex flex-col space-y-4 mt-20 px-6 py-4 w-full h-full box-border text-center pointer-events-auto">
 					{% for navitem in nav[locale] %}
 						<li class="rounded-2xl border-2 border-main-dark dark:border-main-light px-16 py-2 w-full" role="menuitem">
@@ -68,8 +70,8 @@
 							</a>
 						</li>
 					{% endfor %}
-					{# Language Dropdown #}
-					{# <li class="rounded-2xl border-2 border-main-dark dark:border-main-light px-16 py-2 w-full" role="menuitem">
+					{# <!-- Language Dropdown -->
+					<li class="rounded-2xl border-2 border-main-dark dark:border-main-light px-16 py-2 w-full" role="menuitem">
 						<input class="dropdown w-full justify-center" type="checkbox" id="mobile-language-dropdown"/>
 						<label class="flex justify-center w-full" for="mobile-language-dropdown">
 							Language
