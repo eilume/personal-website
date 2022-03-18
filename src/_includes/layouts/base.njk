@@ -45,9 +45,10 @@
 		<meta property="twitter:site" content="{{ site.twitter }}">
 	</head>
 	
-	<body class="bg-main-light dark:bg-main-dark text-main-dark dark:text-main-light {% if templateClass %}{{ templateClass }}{% endif %}">
+	<body class="bg-main-light dark:bg-main-dark text-main-dark dark:text-main-light selection:bg-accent accent-accent {% if templateClass %}{{ templateClass }}{% endif %}">
 		{# <div id="margins" class="w-full lg:w-4/5 mx-auto"> #}
-		<div id="margins" class="w-full px-2 lg:px-16 xl:px-32">
+		{# TODO: better margins, too content is too wide on large displays #}
+		<div id="margins" class="w-full xl:w-11/12 2xl:w-8/12 mx-auto px-2 lg:px-16 xl:px-0">
 			{% include "partials/header.njk" %}
 			<main id="main-content" class="main mt-16">
 				<div class="inner flex flex-col space-y-4">
@@ -56,8 +57,8 @@
 				</div>
 			</main>
 			{% include "partials/footer.njk" %}
-			{# <script defer src="{{ '/assets/js/prism.js' | url }}" type="module"></script> #}
-			<script async src="{{ '/assets/js/app.js' | url }}"></script>
 		</div>
+		{# <script defer src="{{ '/assets/js/prism.js' | url }}" type="module"></script> #}
+		<script async src="{{ '/assets/js/app.js' | url }}"></script>
 	</body>
 </html>

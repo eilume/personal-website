@@ -1,6 +1,7 @@
 const { DateTime } = require("luxon");
 const moment = require("moment");
 const { highlightShortcode, imageShortcode } = require("./src/_shortcodes");
+const { capitalizeFirst, capitalizeAll } = require("./src/_filters");
 const syntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
 const { EleventyRenderPlugin } = require("@11ty/eleventy");
 const pluginRss = require("@11ty/eleventy-plugin-rss");
@@ -88,13 +89,9 @@ module.exports = function (config) {
     config.addPairedShortcode("highlight", highlightShortcode);
     config.addShortcode("image", imageShortcode);
 
-    config.addFilter("capitalizeFirst", function(value) {
-        return value.replace(/^\w/, (c) => c.toUpperCase());
-    });
+    config.addFilter("capitalizeFirst", capitalizeFirst);
 
-    config.addFilter("capitalizeAll", function(value) {
-        return value.trim().toLowerCase().replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
-    });
+    config.addFilter("capitalizeAll", capitalizeAll);
 
     return {
         passthroughFileCopy: true,
