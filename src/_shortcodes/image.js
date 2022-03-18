@@ -265,7 +265,7 @@ const imageShortcode = async (
         if (creditUrl != "")
         {
             // Add clickable credit
-            picture += `\n<a class="mx-auto sm:ml-auto flex text-main-light w-fit" href="${creditUrl}"><p class="font-medium">Image Source:&nbsp;<p class="font-bold">${credit}</p></p></a>`;
+            picture += `\n<a class="mx-auto sm:ml-auto flex text-main-light w-fit" href="${creditUrl}"><p class="font-medium">Image Source:&nbsp;<p class="font-bold underline">${credit}</p></p></a>`;
         } else {
             // Add credit
             picture += `\n<p class="ml-auto text-main-light font-medium">${credit}</p>`;

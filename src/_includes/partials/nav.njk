@@ -26,9 +26,11 @@
 			</div>
 		</div> #}
 	</ul>
-	<ul class="flex space-x-8">
-		{# Theme picker (only visible if js is enabled, as it'll fallback to using the device theme) #}
-		<li class="require-js">
+	<!--
+	Theme picker (only visible if js is enabled, as it'll fallback to using the device theme)
+	-->
+	<ul class="require-js flex space-x-8">
+		<li>
 			<a class="block dark:hidden" id="theme-select-dark">
 				<svg xmlns="http://www.w3.org/2000/svg" class="fill-main-dark h-5 w-5" viewBox="0 0 20 20">
 					<path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
@@ -61,33 +63,47 @@
 			</div>
 			<!-- Background -->
 			<div class="fixed top-0 left-0 w-full h-full z-10 bg-opacity-75 dark:bg-opacity-75 bg-main-light dark:bg-main-dark backdrop-blur-lg">
+				<!-- Block Input Div -->
+				<div class="h-20 mr-12 pointer-events-auto"></div>
 				<!-- Menu Items -->
-				<ul class="flex flex-col space-y-4 mt-20 px-6 py-4 w-full h-full box-border text-center pointer-events-auto">
-					{% for navitem in nav[locale] %}
+				{# TODO: try and keep these at the top, like the "X button" #}
+				<div class="px-16 py-4">
+					<ul class="flex flex-col box-border text-center pointer-events-auto">
+						{% for navitem in nav[locale] %}
+							<li class="bg-opacity-75 dark:bg-opacity-75 bg-main-light dark:bg-main-dark
+								{% if not loop.last %}
+									border-b-2
+									{% if loop.first %}
+										rounded-t-2xl
+									{% endif %}
+								{% else %}
+									rounded-b-2xl
+								{% endif %}
+								border-opacity-50 dark:border-opacity-50 border-main-dark dark:border-main-light px-16 py-4 w-full" role="menuitem">
+								<a class="w-full block" href="{{ navitem.url }}">
+									{{ navitem.label }}
+								</a>
+							</li>
+						{% endfor %}
+						{# <!-- Language Dropdown -->
 						<li class="rounded-2xl border-2 border-main-dark dark:border-main-light px-16 py-2 w-full" role="menuitem">
-							<a class="w-full block" href="{{ navitem.url }}">
-								{{ navitem.label }}
-							</a>
-						</li>
-					{% endfor %}
-					{# <!-- Language Dropdown -->
-					<li class="rounded-2xl border-2 border-main-dark dark:border-main-light px-16 py-2 w-full" role="menuitem">
-						<input class="dropdown w-full justify-center" type="checkbox" id="mobile-language-dropdown"/>
-						<label class="flex justify-center w-full" for="mobile-language-dropdown">
-							Language
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-							</svg>
-						</label>
-						<div class="dropdown-content">
-							<ul class="flex flex-col space-y-4 p-4">
-								{% for lang in site.languages %}
-									{% renderFile "./src/_includes/templates/language-selection.11ty.js", lang %}
-								{% endfor %}
-							</ul>
-						</div>
-					</li> #}
-				</ul>
+							<input class="dropdown w-full justify-center" type="checkbox" id="mobile-language-dropdown"/>
+							<label class="flex justify-center w-full" for="mobile-language-dropdown">
+								Language
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+								</svg>
+							</label>
+							<div class="dropdown-content">
+								<ul class="flex flex-col space-y-4 p-4">
+									{% for lang in site.languages %}
+										{% renderFile "./src/_includes/templates/language-selection.11ty.js", lang %}
+									{% endfor %}
+								</ul>
+							</div>
+						</li> #}
+					</ul>
+				</div>
 			</div>
 		</div>
 	</div>
