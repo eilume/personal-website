@@ -60,13 +60,6 @@ input:checked ~ div.dropdown-content {
 	display: block;
 }
 
-/* Mobile Menu */
-
-input:checked ~ div.mobile-menu {
-	backdrop-filter: blur(16px);
-	-webkit-backdrop-filter: blur(16px);
-}
-
 /* Lazy Images */
 
 .image > picture {

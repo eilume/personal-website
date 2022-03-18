@@ -41,59 +41,52 @@
 			</a>
 		</li>
 	</ul>
-	<div class="sm:hidden">
+	<div class="sm:hidden relative">
 		<input class="dropdown" type="checkbox" id="mobile-menu-dropdown"/>
 		<label class="flex" for="mobile-menu-dropdown">
 			<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
 				<path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
 			</svg>
 		</label>
-		{# <div class="dropdown-content fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 bg-opacity-75 dark:bg-opacity-75 bg-main-light dark:bg-main-dark rounded-2xl"> #}
-		{# <div id="mobile-menu" class="dropdown-content fixed top-0 left-0 w-screen h-screen z-10 bg-opacity-75 dark:bg-opacity-75 bg-main-light dark:bg-main-dark backdrop-blur-lg rounded-2xl pointer-events-none"> #}
-		<div class="dropdown-content mobile-menu fixed top-0 left-0 w-full h-full z-10 bg-opacity-75 dark:bg-opacity-75 bg-main-light dark:bg-main-dark rounded-2xl pointer-events-none">
+		<div class="dropdown-content mobile-menu absolute top-0 left-0 w-full h-full pointer-events-none">
 			<!--
 			This is sneaky trick, the X button still has the `pointer-events` set to none
 			but its positioned above the menu button, so you'll actually hit that button,
 			triggering the menu to close. This is all to add support for no-js browsers... 
 			-->
-			{# TODO: figure out either to prevent scrolling or sticking this div to the top of the page #}
-			<div class="mx-4 mt-4">
-				<div class="flex w-full h-20 px-2">
-					<div class="flex-grow pointer-events-auto">
-					</div>
-					<div class="ml-auto my-4">
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-							<path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-						</svg>
-					</div>
-				</div>
+			<div class="relative z-20">
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+					<path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+				</svg>
 			</div>
-			<ul class="flex flex-col space-y-4 px-6 py-4 w-full h-full box-border text-center pointer-events-auto">
-				{% for navitem in nav[locale] %}
-					<li class="rounded-2xl border-2 border-main-dark dark:border-main-light px-16 py-2 w-full" role="menuitem">
-						<a class="w-full block" href="{{ navitem.url }}">
-							{{ navitem.label }}
-						</a>
-					</li>
-				{% endfor %}
-				{# Language Dropdown #}
-				{# <li class="rounded-2xl border-2 border-main-dark dark:border-main-light px-16 py-2 w-full" role="menuitem">
-					<input class="dropdown w-full justify-center" type="checkbox" id="mobile-language-dropdown"/>
-					<label class="flex justify-center w-full" for="mobile-language-dropdown">
-						Language
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-						</svg>
-					</label>
-					<div class="dropdown-content">
-						<ul class="flex flex-col space-y-4 p-4">
-							{% for lang in site.languages %}
-								{% renderFile "./src/_includes/templates/language-selection.11ty.js", lang %}
-							{% endfor %}
-						</ul>
-					</div>
-				</li> #}
-			</ul>
+			<div class="fixed top-0 left-0 w-full h-full z-10 bg-opacity-75 dark:bg-opacity-75 bg-main-light dark:bg-main-dark backdrop-blur-lg">
+				<ul class="flex flex-col space-y-4 mt-20 px-6 py-4 w-full h-full box-border text-center pointer-events-auto">
+					{% for navitem in nav[locale] %}
+						<li class="rounded-2xl border-2 border-main-dark dark:border-main-light px-16 py-2 w-full" role="menuitem">
+							<a class="w-full block" href="{{ navitem.url }}">
+								{{ navitem.label }}
+							</a>
+						</li>
+					{% endfor %}
+					{# Language Dropdown #}
+					{# <li class="rounded-2xl border-2 border-main-dark dark:border-main-light px-16 py-2 w-full" role="menuitem">
+						<input class="dropdown w-full justify-center" type="checkbox" id="mobile-language-dropdown"/>
+						<label class="flex justify-center w-full" for="mobile-language-dropdown">
+							Language
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+							</svg>
+						</label>
+						<div class="dropdown-content">
+							<ul class="flex flex-col space-y-4 p-4">
+								{% for lang in site.languages %}
+									{% renderFile "./src/_includes/templates/language-selection.11ty.js", lang %}
+								{% endfor %}
+							</ul>
+						</div>
+					</li> #}
+				</ul>
+			</div>
 		</div>
 	</div>
 </div>
