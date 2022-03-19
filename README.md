@@ -1,8 +1,8 @@
 # Personal Website
 
 <p align="center">
-    <img alt="Latest Version" src="https://img.shields.io/github/v/tag/eilume/personal-website?color=ff594d&style=flat-square">
-    <img alt="License: MIT" src="https://img.shields.io/github/license/eilume/personal-website?color=ff594d&style=flat-square">
+    <img alt="Latest Version" src="https://img.shields.io/github/v/tag/eilume/personal-website?style=flat-square&color=ff594d">
+    <img alt="License: MIT" src="https://img.shields.io/github/license/eilume/personal-website?style=flat-square&color=ff594d">
 </p>
 
 > My [personal website](https://eilu.me) for stuff I'm up to. Built with [Eleventy/11ty](https://www.11ty.dev), [tailwindcss](https://tailwindcss.com) and [Vite](https://vitejs.dev).
