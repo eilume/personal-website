@@ -3,7 +3,7 @@ const fs_extra = require('fs-extra');
 const path = require('path');
 
 // Originally from: https://stackoverflow.com/a/25462405
-function getFilteredFiles(startPath, filter, outputList) {
+function getFilteredFilesFilter(startPath, filter, outputList) {
     if (!fs.existsSync(startPath)) {
         console.log("no dir ", startPath);
         return;
@@ -14,7 +14,7 @@ function getFilteredFiles(startPath, filter, outputList) {
         var filename = path.join(startPath, files[i]);
         var stat = fs.lstatSync(filename);
         if (stat.isDirectory()) {
-            getFilteredFiles(filename, filter, outputList); //recurse
+            getFilteredFilesFilter(filename, filter, outputList); //recurse
         }
         else if (filename.indexOf(filter) >= 0) {
             outputList.push(filename);
@@ -22,13 +22,35 @@ function getFilteredFiles(startPath, filter, outputList) {
     };
 };
 
+function getFilteredFilesRegex(startPath, regex, outputList) {
+    if (!fs.existsSync(startPath)) {
+        console.log("no dir ", startPath);
+        return;
+    }
+
+    var files = fs.readdirSync(startPath);
+    for (var i = 0; i < files.length; i++) {
+        var filename = path.join(startPath, files[i]);
+        var stat = fs.lstatSync(filename);
+        if (stat.isDirectory()) {
+            getFilteredFilesRegex(filename, regex, outputList); //recurse
+        }
+        else {
+            var matches = filename.match(regex);
+            if (matches != null && matches.length == 1) {
+                outputList.push(filename);
+            }
+        };
+    };
+};
+
 let htmlFiles = [];
-getFilteredFiles("./dist", ".html", htmlFiles);
+getFilteredFilesFilter("./dist", ".html", htmlFiles);
 
 let publicCSSFiles = [];
 let distCSSFiles = [];
-getFilteredFiles("./public/assets/css", ".css", publicCSSFiles);
-getFilteredFiles("./dist/assets", ".css", distCSSFiles);
+getFilteredFilesFilter("./public/assets/css", ".css", publicCSSFiles);
+getFilteredFilesFilter("./dist/assets", ".css", distCSSFiles);
 
 for (let h = 0; h < htmlFiles.length; h++) {
     let htmlFile = fs.readFileSync(htmlFiles[h], "utf-8").toString();
@@ -64,8 +86,8 @@ for (let h = 0; h < htmlFiles.length; h++) {
 
 let publicJSFiles = [];
 let distJSFiles = [];
-getFilteredFiles("./public/assets/js", ".js", publicJSFiles);
-getFilteredFiles("./dist/assets", ".js", distJSFiles);
+getFilteredFilesFilter("./public/assets/js", ".js", publicJSFiles);
+getFilteredFilesFilter("./dist/assets", ".js", distJSFiles);
 
 for (let h = 0; h < htmlFiles.length; h++) {
     let htmlFile = fs.readFileSync(htmlFiles[h], "utf-8").toString();
@@ -100,7 +122,7 @@ for (let h = 0; h < htmlFiles.length; h++) {
 }
 
 let openGraphImageFiles = [];
-getFilteredFiles("./public", "open-graph.jpeg", openGraphImageFiles);
+getFilteredFilesRegex("./public", /open-graph-[a-zA-Z0-9]+.jpeg/gm, openGraphImageFiles);
 
 for (let i = 0 ; i < openGraphImageFiles.length; i++)
 {

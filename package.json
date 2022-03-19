@@ -14,7 +14,9 @@
     "build:vite": "vite build",
     "build:post-vite": "node build/post-vite.js",
     "start": "npm-run-all --parallel start:*",
-    "build": "NODE_ENV=production npm-run-all clean-dist build:tailwind build:eleventy build:pre-vite build:vite build:post-vite"
+    "build": "NODE_ENV=production npm-run-all clean-dist build:tailwind build:eleventy build:pre-vite build:vite build:post-vite",
+    "preview": "netlify deploy",
+    "publish": "netlify deploy --prod"
   },
   "keywords": [],
   "author": "eilume",
@@ -36,7 +38,8 @@
     "rimraf": "^3.0.2",
     "tailwindcss": "^3.0.2",
     "vite-plugin-html": "^2.1.1",
-    "vite-plugin-pwa": "^0.11.11"
+    "vite-plugin-pwa": "^0.11.11",
+    "netlify-cli": "^9.13.2"
   },
   "dependencies": {
     "@11ty/eleventy-navigation": "^0.3.2",

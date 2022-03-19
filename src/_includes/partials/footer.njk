@@ -1,17 +1,24 @@
-<footer class="footer" role="banner">
-    {% for footeritem in footer[locale] %}
-        {% if loop.first %} <ul class="footer" role="menubar"> {% endif %}
-            <li role="menuitem">
-                {% if footeritem.url %}
-                    <a href="{{ footeritem.url }}">
-                        {{ footeritem.text }}
-                    </a>
-                {% else %}
-                    <p>
-                        {{ footeritem.text }}
-                    </p>
+{# TODO: somehow stick to bottom of page if  #}
+{# <footer class="footer">
+    <div class="container py-8 mt-8 border-t-2 border-opacity-20 dark:border-opacity-20 border-main-dark dark:border-main-light">
+        {% for footeritem in footer[locale] %}
+            {% if loop.first %} <ul class="flex space-x-4 justify-center"> {% endif %}
+                <li>
+                    {% if footeritem.url %}
+                        <a href="{{ footeritem.url }}">
+                            {{ footeritem.label }}
+                        </a>
+                    {% else %}
+                        <p>
+                            {{ footeritem.label }}
+                        </p>
+                    {% endif %}
+                </li>
+                {% if not loop.last %}
+                    <div class="w-1 h-full border-r-2 border-opacity-20 dark:border-opacity-20 border-main-dark dark:border-main-light">
+                    </div>
                 {% endif %}
-            </li>
-        {% if loop.last %} </ul> {% endif %}
-    {% endfor %}
-</footer>
+            {% if loop.last %} </ul> {% endif %}
+        {% endfor %}
+    </div>
+</footer> #}

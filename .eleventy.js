@@ -10,8 +10,16 @@ const pluginNavigation = require("@11ty/eleventy-navigation");
 module.exports = function (config) {
     const now = new Date();
 
-    const publishedPosts = (post) => post.date <= now && !post.data.draft && !post.data.private;
-
+    const isProduction = process.env.ELEVENTY_PRODUCTION == 1;
+    
+    let publishedPosts;
+    if (isProduction)
+    {
+        publishedPosts = (post) => post.date <= now && !post.data.draft && !post.data.private;
+    } else {
+        publishedPosts = (post) => !post.data.private;
+    }
+    
     // Plugins
     config.addPlugin(syntaxHighlight);
     config.addPlugin(EleventyRenderPlugin);

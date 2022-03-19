@@ -3,7 +3,19 @@
 {% block content %}
 {# <a href="/{{ locale }}/blog/" class="back">← {{ site[locale].back }}</a> #}
 <div class="flex flex-col space-y-3">
-    <h1 class="text-5xl font-extrabold text-main-dark dark:text-main-light">{{ title }}</h1>
+    {% if draft %}
+        <div class="w-full bg-main-dark dark:bg-main-light rounded-lg">
+            <h4 class="font-extrabold text-main-light text-center">Draft Post</h4>
+        </div>
+    {% endif %}
+    {% if private %}
+        <div class="w-full bg-main-dark dark:bg-main-light rounded-lg">
+            <h4 class="font-extrabold text-main-light text-center">Private Post</h4>
+        </div>
+    {% endif %}
+    <h1 class="text-5xl font-extrabold text-main-dark dark:text-main-light">
+        {{ title }}
+    </h1>
     <div class="flex flex-col space-x-0 space-y-4 lg:flex-row lg:space-x-16 lg:space-y-0">
         <div class="flex-grow">
             {% include "partials/blog-post-tags.njk" %}
@@ -14,7 +26,7 @@
     </div>
 </div>
 {% renderFile "./src/_includes/templates/cover.11ty.js", cover %}
-<div class="markdown-content inner flex flex-col space-y-4">
+<div class="markdown-content inner flex flex-col space-y-4 pt-2">
     {{ content | safe }}
 </div>
 {% endblock %}

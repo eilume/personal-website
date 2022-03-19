@@ -1,5 +1,11 @@
 /* Overall */
 
+html {
+	--main-dark: #020f19;
+	--main-light: #fff;
+	--accent: #ff594d;
+}
+
 body {
 	margin: 1rem;
 }
@@ -76,4 +82,12 @@ input:checked ~ div.dropdown-content {
 .lazy-picture[data-loaded] .lazy-img {
 	filter: unset;
 	transform: none;
+}
+
+/* Markdown Content */
+
+.markdown-content > p > a {
+	color: var(--accent);
+	text-decoration: var(--accent);
+	text-decoration-line: underline;
 }
