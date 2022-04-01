@@ -4,7 +4,7 @@ module.exports = {
   baseUrl: "https://eilu.me",
   name: "eilume's Personal Website",
   twitter: "@eilume",
-  titlePrefix: "eilume :: ",
+  titlePostfix: " :: eilume",
   defaultOpenGraphImage: `/content/image/default-opengraph-image.png`,
   defaultOpenGraphImageAlt: "OpenGraph Alt Text",
   languages: [

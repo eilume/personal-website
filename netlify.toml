@@ -7,10 +7,10 @@
     img-src https: data: blob:;
     media-src https: data: blob:;
     base-uri 'none';
-    script-src 'self';
+    script-src 'self' eyesight.eilu.me;
     style-src 'self';
     manifest-src 'self';
-    connect-src 'self';
+    connect-src 'self' eyesight.eilu.me;
     object-src 'none';
     frame-src 'self' www.youtube-nocookie.com;
     frame-ancestors https://www.youtube-nocookie.com;

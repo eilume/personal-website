@@ -12,10 +12,10 @@ module.exports = {
         },
         extend: {
             colors: {
-                'main-dark': "#020F19",
-                'main-light': "#FFF",
-                'accent': "#FF594D",
-            }
+                'main-dark': '#020F19',
+                'main-light': '#FFF',
+                'accent': '#FF594D',
+            },
         },
     },
     plugins: [],

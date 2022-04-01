@@ -1,4 +1,3 @@
 Sitemap: https://eilu.me/sitemap.xml
 
 User-agent: *
-Disallow: /

@@ -5,7 +5,7 @@
     <img alt="License: MIT" src="https://img.shields.io/github/license/eilume/personal-website?style=flat-square&color=ff594d">
 </p>
 
-> My [personal website](https://eilu.me) for stuff I'm up to. Built with [Eleventy/11ty](https://www.11ty.dev), [tailwindcss](https://tailwindcss.com) and [Vite](https://vitejs.dev).
+> My [personal website](https://eilu.me) for stuff I'm up to. Built with [11ty](https://www.11ty.dev), [tailwindcss](https://tailwindcss.com) and [Vite](https://vitejs.dev).
 
 > This isn't supposed to be used as a template, some aspects are quite messy and I won't be providing support for this repo.
 
@@ -25,7 +25,7 @@
 - **Open Graph Support** - Meta tags for each page with appropriate data
   - **Automated Page Covers** - Auto-generate page covers using a template via [skia-canvas](https://github.com/samizdatco/skia-canvas)
 - **Responsive Design** - Responsive, mobile-first design via tailwindcss
-- **Light and Dark Theme** - Toggle-able theme switching using [tailwindcss' dark mode]()
+- **Light and Dark Theme** - Toggle-able theme switching using [tailwindcss' dark mode](https://tailwindcss.com/docs/dark-mode)
 - **Minimal Bloat** - Keeps download sizes in mind
 - **Support Non-JS Supported/Enabled Browsers** - Rely on as little client-side JS with some CSS tricks
 <!-- - **CMS Support** -  -->

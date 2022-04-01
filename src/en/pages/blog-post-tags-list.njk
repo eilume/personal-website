@@ -1,5 +1,6 @@
 ---
 title: Blog Tags List
+description: List of all blog post tags
 permalink: /{{ locale }}/blog/tags/
 translationKey: "blog-tags-list"
 ---
@@ -7,7 +8,8 @@ translationKey: "blog-tags-list"
 {% extends "layouts/base.njk" %}
 
 {% block content %}
-<h2 class="text-2xl">Tags</h2>
-{% set tags = collections.blogtags_en | reverse %}
+<h3>Tags:</h3>
+{% set tags = collections.blogtags_en %}
+{# TODO: add number badge incidicating amount of posts with that tag #}
 {% include "partials/blog-post-tags.njk" %}
 {% endblock %}
