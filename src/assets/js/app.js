@@ -1,15 +1,27 @@
+// Theme Swapping
 // On page load or when changing themes, best to add inline in `head` to avoid FOUC
 function updateTheme()
 {
+    // This ensures that you don't see the transition on page load
+    if (themeChangeCount == 1)
+    {
+        document.body.classList.add("transition-colors", "duration-300");
+    }
+
     if (localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
         document.documentElement.classList.add("dark");
     } else {
         document.documentElement.classList.remove("dark");
     }
+
+    themeChangeCount++;
 }
+
+let themeChangeCount = 0;
 
 updateTheme();
 
+// Theme Select Buttons
 const themeSelectLight = document.getElementById("theme-select-light");
 const themeSelectDark = document.getElementById("theme-select-dark");
 
@@ -30,6 +42,7 @@ themeSelectDark.onclick = function()
 
 // From: https://www.aleksandrhovhannisyan.com/blog/eleventy-image-lazy-loading/
 
+// Image Lazy Loading
 const lazyLoad = (targets, onIntersection) => {
     const observer = new IntersectionObserver((entries, self) => {
         entries.forEach((entry) => {

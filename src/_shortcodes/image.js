@@ -52,7 +52,7 @@ const imageShortcode = async (
         // Local file
         const { name: parsedName, dir: parsedDir } = path.parse(src);
         
-        imgName = parsedName;
+        imgName = fileName != "" ? fileName : parsedName;
         imgDir = parsedDir;
         fullSrc = path.join('src', src);
 
@@ -116,7 +116,7 @@ const imageShortcode = async (
                     if (isOriginalWidth) suffix = 'original';
             }
 
-            return `${imgName}-${hash}-${suffix}.${format}`;
+            return `${imgName}${hash}-${suffix}.${format}`;
         },
     });
 
@@ -154,7 +154,7 @@ const imageShortcode = async (
                         if (isOriginalWidth) suffix = 'original';
                 }
 
-                return `${imgName}-${baseFileHash}-hidpiscaled-${suffix}.${format}`;
+                return `${imgName}${baseFileHash}-hidpiscaled-${suffix}.${format}`;
             },
         });
     }
@@ -262,14 +262,7 @@ const imageShortcode = async (
     {
         picture += `<div class="absolute bottom-0 right-0 p-4 bg-main-dark bg-opacity-75 backdrop-blur-lg w-full sm:w-fit rounded-br-2xl rounded-bl-2xl sm:rounded-bl-none sm:rounded-tl-2xl">`;
         
-        if (creditUrl != "")
-        {
-            // Add clickable credit
-            picture += `\n<a class="mx-auto sm:ml-auto flex text-main-light w-fit" href="${creditUrl}"><p class="font-medium">Image Source:&nbsp;<p class="font-bold underline">${credit}</p></p></a>`;
-        } else {
-            // Add credit
-            picture += `\n<p class="ml-auto text-main-light font-medium">${credit}</p>`;
-        }
+        picture += `<p class="mx-auto sm:ml-auto flex text-main-light font-medium w-fit">Image Credit:&nbsp;<${creditUrl != "" ? "a" : "p"} class="font-bold${creditUrl != "" ? " underline" + '"' + " href=" + '"' + creditUrl : ""}">${credit}</${creditUrl != "" ? "a" : "p"}></p>`;
 
         picture += "</div>";
     }

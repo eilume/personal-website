@@ -1,0 +1,21 @@
+---
+title: Home
+description: Homepage
+permalink: "/{{ locale }}/index.html"
+translationKey: "homepage"
+---
+
+{% extends "layouts/base.njk" %}
+
+{% block content %}
+<h1 class="flex">Hiya, I'm&nbsp;<a class="text-accent" href="https://go.eilu.me/twitter">@eilume</a>!</h1>
+<br>
+<h2>I'm an indie game developer with various interests not just limited to game development/programming!</h2>
+<br>
+<h2>I'm currently working on a soon-to-be-announced solo indie game!</h2>
+<br>
+<h3>Latest Blog Posts:</h3>
+{% set postLimit = 3 %}
+{% set postslist = collections.blogposts_en %}
+{% include "partials/blog-post-cards.njk" %}
+{% endblock %}

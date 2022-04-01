@@ -1,0 +1,76 @@
+{% set postLimitReached = false %}
+<ul class="grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-8">
+	{% set blogCount = 0 %}
+	{% for post in postslist | reverse %}
+        {% if postLimit %}
+            {% if loop.index0 >= postLimit %}
+                {% set postLimitReached = true %}
+            {% endif %}
+        {% endif %}
+        {% if loop.first %}
+            <li class="lg:col-span-2">
+        {% else %}
+            <li>
+        {% endif %}
+        {% if not postLimitReached %}
+            <div class="relative overflow-hidden">
+                <a href="{{ post.url }}">
+                    {% renderFile "./src/_includes/templates/blog-card-cover.11ty.js", post.data %}
+                </a>
+                <div class="absolute flex w-full h-full top-0 left-0 bg-opacity-50 dark:bg-opacity-50 bg-main-dark text-main-light rounded-2xl pointer-events-none">
+                    <h2 class="m-auto z-10">
+                        {{ post.data.title }}
+                    </h2>
+                </div>
+                <div class="absolute flex w-full h-full top-0 left-0 p-8 flex-col text-main-light pointer-events-none">
+                    <div class="flex max-h-14 overflow-hidden">
+                        <div class="pointer-events-auto">
+                            {% set tags = post.data.tags %}
+                            {% set tagLimit = 3 %}
+                            {% include "partials/blog-post-tags.njk" %}
+                        </div>
+                        <div class="ml-auto pl-4 flex min-w-max">
+                            <p class="font-medium">Posted on&nbsp;</p>
+                            <time datetime="{{ post.date | date('Y-MM-DD') }}">
+                                {{ post.date | date("DD MMMM Y", locale) }}
+                            </time>
+                        </div>
+                    </div>
+                    <div class="flex-grow"></div>
+                    {% if post.data.cover.credit %}
+                        <div class="flex ml-auto max-h-14">
+                            <p class="font-medium">
+                                Image Credit:&nbsp;
+                            </p>
+                            {% if post.data.cover.creditUrl %}
+                                <a class="font-bold underline pointer-events-auto" href="{{ post.data.cover.creditUrl }}">
+                            {% else %}
+                                <p class="font-bold">
+                            {% endif %}
+                                    {{ post.data.cover.credit }}
+                            {% if post.data.cover.creditUrl %}
+                                </a>
+                            {% else %}
+                                </p>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+		</li>
+		{% set blogCount = blogCount + 1 %}
+	{% endfor %}
+</ul>
+{% if postLimitReached %}
+    {# TODO: add button to see more blog posts #}
+    <div class="border-2 mx-auto px-4 py-2 w-max bg-opacity-5 dark:bg-opacity-5 hover:bg-opacity-10 dark:hover:bg-opacity-10 bg-main-dark dark:bg-main-light border-opacity-50 dark:border-opacity-50 border-main-dark dark:border-main-light rounded-2xl">
+        <a href="/{{locale}}/blog/">
+            See more blog posts...
+        </a>
+    </div>
+{% else %}
+    {% if blogCount == 0 %}
+        <p>No posts!</p>
+    {% endif %}
+{% endif %}

@@ -8,9 +8,9 @@ module.exports = {
 			label: "Blog",
 			url: "/en/blog/"
 		},
-		{
-			label: "About",
-			url: "/en/about/"
-		},
+		// {
+		// 	label: "About",
+		// 	url: "/en/about/"
+		// },
 	],
 };

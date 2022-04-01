@@ -6,10 +6,6 @@ html {
 	--accent: #ff594d;
 }
 
-body {
-	margin: 1rem;
-}
-
 picture,
 pre {
 	border-radius: 1em !important;

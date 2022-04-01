@@ -8,14 +8,15 @@ const pluginRss = require("@11ty/eleventy-plugin-rss");
 const pluginNavigation = require("@11ty/eleventy-navigation");
 
 module.exports = function (config) {
-    const now = new Date();
+    const dateNow = new Date();
 
-    const isProduction = process.env.ELEVENTY_PRODUCTION == 1;
+    const isProduction = process.env.ELEVENTY_PRODUCTION;
     
     let publishedPosts;
     if (isProduction)
     {
-        publishedPosts = (post) => post.date <= now && !post.data.draft && !post.data.private;
+        publishedPosts = (post) => post.date <= dateNow && !post.data.draft && !post.data.private;
+        config
     } else {
         publishedPosts = (post) => !post.data.private;
     }

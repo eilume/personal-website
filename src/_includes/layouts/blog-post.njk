@@ -1,15 +1,14 @@
 {% extends "layouts/base.njk" %}
 
 {% block content %}
-{# <a href="/{{ locale }}/blog/" class="back">← {{ site[locale].back }}</a> #}
 <div class="flex flex-col space-y-3">
     {% if draft %}
-        <div class="w-full bg-main-dark dark:bg-main-light rounded-lg">
+        <div class="w-full bg-accent rounded-lg">
             <h4 class="font-extrabold text-main-light text-center">Draft Post</h4>
         </div>
     {% endif %}
     {% if private %}
-        <div class="w-full bg-main-dark dark:bg-main-light rounded-lg">
+        <div class="w-full bg-accent rounded-lg">
             <h4 class="font-extrabold text-main-light text-center">Private Post</h4>
         </div>
     {% endif %}
@@ -25,7 +24,8 @@
         </div>
     </div>
 </div>
-{% renderFile "./src/_includes/templates/cover.11ty.js", cover %}
+{% set postData = {"translationKey": translationKey, "cover": cover} %}
+{% renderFile "./src/_includes/templates/cover.11ty.js", postData %}
 <div class="markdown-content inner flex flex-col space-y-4 pt-2">
     {{ content | safe }}
 </div>

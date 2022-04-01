@@ -1,13 +1,17 @@
 <div class="flex flex-col lg:flex-row text-lg whitespace-nowrap">
     <div class="flex">
         <p class="font-medium">Posted on&nbsp;</p>
-        <p class="font-bold">{{ date | htmlDateString }}</p>
+        <time class="font-bold" datetime="{{ date | date('Y-MM-DD') }}">
+            {{ date | date("DD MMMM Y", locale) }}
+        </time>
     </div>
     {% if lastModified and not (lastModified == date) %}
         <div class="flex">
-                <p class="font-medium hidden lg:block">.&nbsp;</p>
-                <p class="font-medium">Last updated&nbsp;</p>
-                <p class="font-bold">{{ lastModified | htmlDateString }}</p>
+            <p class="font-medium hidden lg:block">.&nbsp;</p>
+            <p class="font-medium">Last updated&nbsp;</p>
+            <time class="font-bold" datetime="{{ lastModified | date('Y-MM-DD') }}">
+                {{ lastModified | date("DD MMMM Y", locale) }}
+            </time>
         </div>
     {% endif %}
 </div>

@@ -1,23 +1,53 @@
-<ul class="flex space-x-4">
+<ul class="grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-8 xl:gap-0 xl:flex xl:flex-col xl:space-y-4">
 	{% set blogCount = 0 %}
-	{% for post in postslist %}
-		{% if (not post.data.draft) and (not post.data.private) %}
-			<li>
-				<article>
-					<h3 class="text-xl">
-						<a class="text-cyan-500" href="{{ post.url }}">
+	{% for post in postslist | reverse %}
+	{# {% for post in postslist | sortByDate %} #}
+		<li class="flex flex-col space-y-4 xl:flex-row xl:space-y-0 xl:space-x-4">
+			{# <img class="object-cover w-auto h-auto sm:w-64 sm:h-16" src="{{ post.data.cover.path | url }}"/> #}
+			<a href="{{ post.url }}">
+				{% renderFile "./src/_includes/templates/blog-list-cover.11ty.js", post.data %}
+			</a>
+			<div class="xl:flex-grow">
+				<div class="xl:flex xl:flex-col xl:justify-center xl:h-1/2">
+					<h4>
+						<a href="{{ post.url }}">
 							{{ post.data.title }}
 						</a>
-					</h3>
+					</h4>
+				</div>
+				<div class="xl:flex xl:flex-col xl:justify-center xl:h-1/2">
 					{% set tags = post.data.tags %}
+					{% set tagLimit = 3 %}
 					{% include "partials/blog-post-tags.njk" %}
-					<time datetime="{{ post.date | date('Y-MM-DD') }}">
-						{{ post.date | date("DD MMMM[,] Y", locale) }}
-					</time>
-				</article>
-			</li>
+				</div>
+			</div>
+			<div class="flex flex-row xl:flex-col xl:text-right">
+				<time class="xl:flex xl:flex-col xl:justify-center xl:h-1/2 flex-grow xl:flex-grow-0" datetime="{{ post.date | date('Y-MM-DD') }}">
+					{{ post.date | date("DD MMMM Y", locale) }}
+				</time>
+				<div class="xl:flex xl:flex-col xl:justify-center xl:h-1/2">
+					{% if post.data.cover.credit %}
+						<div class="flex">
+							<p class="font-medium">
+								Image Credit:&nbsp;
+							</p>
+							{% if post.data.cover.creditUrl %}
+								<a class="font-bold underline" href="{{ post.data.cover.creditUrl }}">
+							{% else %}
+								<p class="font-bold">
+							{% endif %}
+									{{ post.data.cover.credit }}
+							{% if post.data.cover.creditUrl %}
+								</a>
+							{% else %}
+								</p>
+							{% endif %}
+						</div>
+					{% endif %}
+				</div>
+			</div>
+		</li>
 		{% set blogCount = blogCount + 1 %}
-		{% endif %}
 	{% endfor %}
 </ul>
 {% if blogCount == 0 %}

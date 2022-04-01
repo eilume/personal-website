@@ -1,5 +1,6 @@
 ---
 title: Blog Posts
+description: List of all blog posts
 permalink: "/{{ locale }}/blog/index.html"
 translationKey: "blogpage"
 ---
@@ -7,11 +8,11 @@ translationKey: "blogpage"
 {% extends "layouts/base.njk" %}
 
 {% block content %}
-<h2 class="text-2xl">Blog Tags</h2>
-{% set tags = collections.blogtags_en | reverse %}
+<h3>Blog Tags:</h3>
+{% set tags = collections.blogtags_en %}
 {% include "partials/blog-post-tags.njk" %}
 <br>
-<h2 class="text-2xl">Blog Posts</h2>
+<h3>Blog Posts:</h3>
 {% set postslist = collections.blogposts_en %}
 {% include "partials/blog-post-list.njk" %}
 {% endblock %}

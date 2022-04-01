@@ -6,6 +6,7 @@ const chalk = require("chalk");
 const log = require("../../../log");
 const crypto = require("crypto");
 const config = require("../../_data/config");
+const axios = require("axios");
 
 const canvasWidth = 2160;
 const canvasHeight = 1080;
@@ -147,8 +148,25 @@ const generateOpenGraphImage = async (titleText = "", descriptionText = "", outp
     });
 }
 
-module.exports = (data) => {
-    let coverFileData = data.cover != undefined && data.cover.path != null ? fs.readFileSync(`./src${data.cover.path}`) : "";
+const procedure = async (data) => {
+    let coverFilePath = data.cover != undefined && data.cover.path != null ? data.cover.path : "";
+    let coverFileData = "";
+    
+    if (coverFilePath != "")
+    {
+        if (/https?:\/\//.test(data.cover.path))
+        {
+            // External URL path
+            const response = await axios.get(data.cover.path, {responseType: "text"});
+            coverFileData = response.data;
+
+        } else {
+            // Local file path
+            coverFilePath = `./src/${data.cover.path}`;
+            fs.readFileSync(coverFilePath);
+        }
+    }
+
     let hash = crypto.createHash("md5").update(data.title + data.description + coverFileData).digest("hex");
     
     const outputFile = `${(data.title != "404" ? data.page.url : data.page.url.replace(".html", "-"))}open-graph-${hash.substring(0, 10)}.jpeg`;
@@ -160,10 +178,14 @@ module.exports = (data) => {
         if (!fs.existsSync(directory) && !directory.includes(".html")) fs.mkdirSync(directory, { recursive: true });
 
         log("Page : Open Graph", "info", `Generating open graph image for page: '${chalk.green(data.page.inputPath)}'`);
-        generateOpenGraphImage(data.title, data.description, `./public${outputFile}`, data.cover != undefined && data.cover.path != null ? `./src${data.cover.path}` : "", data.cover != undefined && data.cover.credit != null ? data.cover.credit : "");
+        generateOpenGraphImage(data.title, data.description, `./public${outputFile}`, coverFilePath, data.cover != undefined && data.cover.credit != null ? data.cover.credit : "");
     } else {
         log("Page : Open Graph", "info", `Found up-to-date open graph image for page: '${chalk.green(data.page.inputPath)}'`);
     }
     
     return `<meta property="og:image" content="${data.url}${outputFile}">`;
+}
+
+module.exports = (data) => {
+    return procedure(data);
 };
