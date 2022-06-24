@@ -17,13 +17,14 @@ module.exports = function (config) {
     const isProduction = process.env.ELEVENTY_PRODUCTION;
 
     let publishedPosts;
+    let ignoredData;
     if (isProduction) {
         publishedPosts = (post) => post.date <= dateNow && !post.data.draft && !post.data.private;
+        ignoredData = (data) => data.ignore || data.draft;
     } else {
         publishedPosts = (post) => !post.data.private;
+        ignoredData = (data) => data.ignore;
     }
-
-    let ignoredPosts = (data) => data.ignore;
 
     // Plugins
     config.addPlugin(syntaxHighlight);
@@ -32,7 +33,7 @@ module.exports = function (config) {
     config.addPlugin(pluginNavigation);
     config.addPlugin(pluginAnchors);
     config.addPlugin(pluginIgnore, {
-        ignore: ignoredPosts,
+        ignore: ignoredData,
         templateFormats: ["md", "njk"]
     });
 
