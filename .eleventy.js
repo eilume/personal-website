@@ -1,31 +1,40 @@
 const { DateTime } = require("luxon");
 const moment = require("moment");
-const { highlightShortcode, imageShortcode } = require("./src/_shortcodes");
-const { capitalizeFirst, capitalizeAll } = require("./src/_filters");
+
 const syntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
 const { EleventyRenderPlugin } = require("@11ty/eleventy");
 const pluginRss = require("@11ty/eleventy-plugin-rss");
 const pluginNavigation = require("@11ty/eleventy-navigation");
+const pluginAnchors = require('@orchidjs/eleventy-plugin-ids');
+const pluginIgnore = require("eleventy-plugin-ignore");
+
+const { highlightShortcode, imageShortcode } = require("./src/_shortcodes");
+const { capitalizeFirst, capitalizeAll } = require("./src/_filters");
 
 module.exports = function (config) {
     const dateNow = new Date();
 
     const isProduction = process.env.ELEVENTY_PRODUCTION;
-    
+
     let publishedPosts;
-    if (isProduction)
-    {
+    if (isProduction) {
         publishedPosts = (post) => post.date <= dateNow && !post.data.draft && !post.data.private;
-        config
     } else {
         publishedPosts = (post) => !post.data.private;
     }
-    
+
+    let ignoredPosts = (data) => data.ignore;
+
     // Plugins
     config.addPlugin(syntaxHighlight);
     config.addPlugin(EleventyRenderPlugin);
     config.addPlugin(pluginRss);
     config.addPlugin(pluginNavigation);
+    config.addPlugin(pluginAnchors);
+    config.addPlugin(pluginIgnore, {
+        ignore: ignoredPosts,
+        templateFormats: ["md", "njk"]
+    });
 
     // Filters
     // Date filter (localized)
@@ -36,23 +45,23 @@ module.exports = function (config) {
     });
 
     config.addFilter("readableDate", dateObj => {
-        return DateTime.fromJSDate(dateObj, {zone: 'utc'}).toFormat("dd LLL yyyy");
+        return DateTime.fromJSDate(dateObj, { zone: 'utc' }).toFormat("dd LLL yyyy");
     });
-    
+
     // https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#valid-date-string
     config.addFilter('htmlDateString', (dateObj) => {
-        return DateTime.fromJSDate(dateObj, {zone: 'utc'}).toFormat('yyyy-LL-dd');
+        return DateTime.fromJSDate(dateObj, { zone: 'utc' }).toFormat('yyyy-LL-dd');
     });
-    
+
     // Get the first `n` elements of a collection.
     config.addFilter("head", (array, n) => {
-        if(!Array.isArray(array) || array.length === 0) {
-          return [];
+        if (!Array.isArray(array) || array.length === 0) {
+            return [];
         }
-        if( n < 0 ) {
-          return array.slice(n);
+        if (n < 0) {
+            return array.slice(n);
         }
-    
+
         return array.slice(0, n);
     });
 
@@ -64,7 +73,7 @@ module.exports = function (config) {
     function filterTagList(tags) {
         return (tags || []).filter(tag => ["all", "nav", "post", "posts"].indexOf(tag) === -1);
     }
-    
+
     config.addFilter("filterTagList", filterTagList);
 
     // Collections
@@ -82,7 +91,7 @@ module.exports = function (config) {
                 tagSet.add(tag);
             });
         });
-    
+
         return filterTagList([...tagSet]);
     });
 

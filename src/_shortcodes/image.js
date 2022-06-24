@@ -41,7 +41,7 @@ const imageShortcode = async (
     sizes = '100vw'
 ) => {
     let imgName, imgDir, fullSrc;
-    
+
     if (/https?:\/\//.test(src)) {
         // URL file
         imgName = fileName;
@@ -51,28 +51,26 @@ const imageShortcode = async (
     else {
         // Local file
         const { name: parsedName, dir: parsedDir } = path.parse(src);
-        
+
         imgName = fileName != "" ? fileName : parsedName;
         imgDir = parsedDir;
         fullSrc = path.join('src', src);
 
         // Ensure file exists
         try {
-            if (!fs.existsSync(fullSrc))
-            {
+            if (!fs.existsSync(fullSrc)) {
                 // File doesn't exist
                 return `<p style="color: red">Image path doesn't exist!</p>`;
             }
         } catch (err) {
             console.error(err);
-            
+
             return err;
         }
     }
 
     let sharedWidths;
-    if (config.imageShortcode.includeHiDpi)
-    {
+    if (config.imageShortcode.includeHiDpi) {
         sharedWidths = Array.from(new Set(unscaledWidths.concat(scaledWidths)));
     } else {
         sharedWidths = Array.from(new Set(unscaledWidths));
@@ -120,8 +118,7 @@ const imageShortcode = async (
         },
     });
 
-    if (config.imageShortcode.includeHiDpi)
-    {
+    if (config.imageShortcode.includeHiDpi) {
         // Generate scaled images with lower quality because of device pixel ratio resulting in super-sampling
         const scaledImageMetadata = await pluginImage(fullSrc, {
             // widths: [ImageWidths.ORIGINAL, ...scaledWidths],
@@ -161,17 +158,15 @@ const imageShortcode = async (
 
     unscaledWidths.push(originalWidth);
     sharedWidths.push(originalWidth);
-    
-    if (config.imageShortcode.includeHiDpi)
-    {
+
+    if (config.imageShortcode.includeHiDpi) {
         scaledWidths.push(originalWidth);
 
         // Add `scaledImageMetadata` to shared `imageMetadata`
-        for (keyIndex in Object.keys(imageMetadata))
-        {
+        for (keyIndex in Object.keys(imageMetadata)) {
             let key = Object.keys(imageMetadata)[keyIndex];
 
-            scaledImageMetadata[key].forEach((value) => {imageMetadata[key].push(value)});
+            scaledImageMetadata[key].forEach((value) => { imageMetadata[key].push(value) });
         }
     }
 
@@ -223,21 +218,20 @@ const imageShortcode = async (
                     // All non-placeholder images get mapped to their srcset
                     .map((image) => image.srcset)
                     .join(', ');
-                
-                if (config.imageShortcode.includeHiDpi)
-                {
+
+                if (config.imageShortcode.includeHiDpi) {
                     let scaledSrcset = formatEntries
-                    // We don't need the placeholder image in the srcset
-                    // We also only want the hidpi scaled images
-                    .filter((image) => image.width !== ImageWidths.PLACEHOLDER && image.filename.includes("-hidpiscaled-"))
-                    // .filter((image) => image.width !== ImageWidths.PLACEHOLDER && (image.filename.includes("-hidpiscaled-") || image.width >= originalWidth))
-                    // All non-placeholder images get mapped to their srcset
-                    .map((image) => image.srcset)
-                    .join(', ');
-                    
+                        // We don't need the placeholder image in the srcset
+                        // We also only want the hidpi scaled images
+                        .filter((image) => image.width !== ImageWidths.PLACEHOLDER && image.filename.includes("-hidpiscaled-"))
+                        // .filter((image) => image.width !== ImageWidths.PLACEHOLDER && (image.filename.includes("-hidpiscaled-") || image.width >= originalWidth))
+                        // All non-placeholder images get mapped to their srcset
+                        .map((image) => image.srcset)
+                        .join(', ');
+
                     // Replace hidpi scaled original with normal, better quality original
                     // scaledSrcset = scaledSrcset.replace("-hidpiscaled-original", "-original");
-                    
+
                     if (lazy) {
                         return `<source media="(-webkit-min-device-pixel-ratio: 1.5)" type="${sourceType}" srcset="${placeholderSrcset}" data-srcset="${scaledSrcset}" data-sizes="${sizes}">\n<source type="${sourceType}" srcset="${placeholderSrcset}" data-srcset="${unscaledSrcset}" data-sizes="${sizes}">`;
                     }
@@ -257,21 +251,24 @@ const imageShortcode = async (
             .join('\n')}
     ${lazy ? lazyImg + "<noscript>" + normalImg + "</noscript>" : normalImg}
     </picture>`;
-    
-    if (credit != "")
-    {
-        picture += `<div class="absolute bottom-0 right-0 p-4 bg-main-dark bg-opacity-75 backdrop-blur-lg w-full sm:w-fit rounded-br-2xl rounded-bl-2xl sm:rounded-bl-none sm:rounded-tl-2xl">`;
-        
-        picture += `<p class="mx-auto sm:ml-auto flex text-main-light font-medium w-fit">Image Credit:&nbsp;<${creditUrl != "" ? "a" : "p"} class="font-bold${creditUrl != "" ? " underline" + '"' + " href=" + '"' + creditUrl : ""}">${credit}</${creditUrl != "" ? "a" : "p"}></p>`;
 
-        picture += "</div>";
+    if (credit != "") {
+        picture += `<div class="absolute bottom-0 right-0 p-4 bg-main-dark bg-opacity-75 backdrop-blur-lg w-full sm:w-fit rounded-br-2xl rounded-bl-2xl sm:rounded-bl-none sm:rounded-tl-2xl">`;
+        picture += `<div class="mx-auto sm:ml-auto flex text-main-light font-medium w-fit"><p>Image Credit:&nbsp</p>`;
+
+        if (creditUrl) {
+            picture += `<a class="font-bold underline" href="${creditUrl}">${credit}</a>`;
+        } else {
+            picture += `<p class="font-bold">${credit}</p>`;
+        }
+
+        picture += "</div></div>";
     }
 
     captionElement = "";
-    if (caption != "")
-    {
+    if (caption != "") {
         // Add caption
-        captionElement = `\n<p class="mt-4 text-center">${caption}</p>`;
+        captionElement = `\n<p class="mt-4 text-center opacity-75">${caption}</p>`;
     }
 
     return `<div><div class="image relative">${picture}</div>${captionElement}</div>`;
