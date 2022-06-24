@@ -9,11 +9,18 @@
 			</a>
 			<div class="xl:flex-grow">
 				<div class="xl:flex xl:flex-col xl:justify-center xl:h-1/2">
-					<h4>
-						<a href="{{ post.url }}">
-							{{ post.data.title }}
-						</a>
-					</h4>
+					<div class="flex flex-row space-x-4">
+						<h4>
+							<a href="{{ post.url }}">
+								{{ post.data.title }}
+							</a>
+						</h4>
+						{% if post.data.draft %}
+							<div class="my-auto w-24 bg-accent rounded-lg text-center">
+								<h4 class="text-sm font-extrabold text-main-light mx-auto">Draft Post</h4>
+							</div>
+						{% endif %}
+					</div>
 				</div>
 				<div class="xl:flex xl:flex-col xl:justify-center xl:h-1/2">
 					{% set tags = post.data.tags %}
