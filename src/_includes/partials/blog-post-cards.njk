@@ -17,11 +17,16 @@
                 <a href="{{ post.url }}">
                     {% renderFile "./src/_includes/templates/blog-card-cover.11ty.js", post.data %}
                 </a>
-                <div class="absolute flex w-full h-full top-0 left-0 bg-opacity-50 dark:bg-opacity-50 bg-main-dark text-main-light rounded-2xl pointer-events-none">
+                <div class="absolute flex w-full h-full top-0 left-0 p-8 bg-opacity-50 dark:bg-opacity-50 bg-main-dark text-main-light rounded-2xl pointer-events-none">
                     <h2 class="m-auto z-10">
                         {{ post.data.title }}
                     </h2>
                 </div>
+                {% if post.data.draft %}
+                    <div class="absolute bottom-8 left-8 my-auto w-24 bg-accent rounded-lg text-center z-10 pointer-events-none">
+                        <h4 class="text-sm font-extrabold text-main-light mx-auto">Draft Post</h4>
+                    </div>
+                {% endif %}
                 <div class="absolute flex w-full h-full top-0 left-0 p-8 flex-col text-main-light pointer-events-none">
                     <div class="flex max-h-14 overflow-hidden">
                         <div class="pointer-events-auto">
